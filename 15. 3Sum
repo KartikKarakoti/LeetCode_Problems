@@ -1,0 +1,37 @@
+class Solution:
+    def threeSum(self, nums):
+        return self.three_sum(nums, 0)
+
+    def three_sum(self, nums, target):
+        memo = {}
+        for k in range(0, len(nums)):
+            num_k = nums[k]
+            memo[num_k] = k
+        
+        ret_val = []
+        seen_nums_triplets_map = {}
+        seen_num_i_map = {}
+        
+        for i in range(0, len(nums)):
+            num_i = nums[i]
+            if (num_i in seen_num_i_map.keys()):
+                continue
+            
+            for j in range(i+1, len(nums)):
+                num_j = nums[j]
+                complement = target - num_i - num_j
+                # num_i + num_j + num_k = target
+                # num_k = target - num_i - num_k
+                # num_k = complement
+                if (complement in memo.keys()):
+                    k = memo[complement]
+                    num_k = complement
+                    if (k > j):
+                        sorted_tuple = tuple(sorted([num_i, num_j, num_k]))
+                        if (sorted_tuple not in seen_nums_triplets_map.keys()):
+                            ret_val.append(sorted_tuple)
+
+                        seen_nums_triplets_map[sorted_tuple] = True
+            seen_num_i_map[num_i] = True
+
+        return ret_val
