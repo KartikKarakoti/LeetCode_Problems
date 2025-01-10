@@ -1,0 +1,24 @@
+class Solution:
+ def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+     ans = []  # List to store all valid combinations
+     helper = []  # Temporary list to store the current combination
+     # Start the recursive process to find combinations
+     self.findAns(0, target, candidates, ans, helper)
+     return ans  # Return the list of valid combinations
+ 
+ def findAns(self, index, target, arr, ans, helper):
+     # Base case: If the index is out of bounds
+     if index == len(arr):
+         if target == 0:  # If the target becomes zero, a valid combination is found
+             ans.append(helper[:])  # Append a copy of the current combination to the result
+         return  # End the current recursive branch
+     
+     # Check if the current element can be included in the combination
+     if arr[index] <= target:
+         helper.append(arr[index])  # Add the current element to the temporary combination
+         # Recursively explore further with the same index and reduced target
+         self.findAns(index, target - arr[index], arr, ans, helper)
+         helper.pop()  # Backtrack: Remove the last element to try other possibilities
+     
+     # Skip the current element and move to the next index
+     self.findAns(index + 1, target, arr, ans, helper)
