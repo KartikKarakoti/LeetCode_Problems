@@ -1,0 +1,23 @@
+class Solution:  
+    def isValidSudoku(self, board: List[List[str]]) -> bool:  
+        rows = [0] * 9  
+        cols = [0] * 9  
+        squares = [0] * 9  
+
+        for r in range(9):  
+            for c in range(9):  
+                if board[r][c] == ".":  
+                    continue  
+                val = int(board[r][c]) - 1  
+                square_index = (r // 3) * 3 + (c // 3)  
+
+                # Check if the digit is already present in the row, column, or square  
+                if (rows[r] & (1 << val)) or (cols[c] & (1 << val)) or (squares[square_index] & (1 << val)):  
+                    return False  
+                
+                # Set the bit for the digit in the respective row, column, and square  
+                rows[r] |= (1 << val)  
+                cols[c] |= (1 << val)  
+                squares[square_index] |= (1 << val)  
+
+        return True 
