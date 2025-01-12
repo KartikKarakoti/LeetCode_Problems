@@ -1,0 +1,28 @@
+class Solution:
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        result = list()
+        m = n
+        matrix = [[0] * n for _ in range(n)]
+        startrow, startcol = 0,0
+        endrow, endcol = m-1, n-1
+        count = 1
+        while startrow <= endrow and startcol <= endcol:
+            for i in range(startcol,endcol+1):
+                matrix[startrow][i] = count
+                count+=1
+            startrow+=1
+            for i in range(startrow,endrow+1):
+                matrix[i][endcol] = count
+                count+=1
+            endcol-=1
+            if startrow <= endrow:
+                for i in range(endcol,startcol-1,-1):
+                    matrix[endrow][i] = count
+                    count+=1
+                endrow-=1
+            if startcol <= endcol:
+                for i in range(endrow,startrow-1,-1):
+                    matrix[i][startcol] = count
+                    count+=1
+                startcol+=1
+        return matrix
