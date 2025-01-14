@@ -1,0 +1,14 @@
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+
+        zero, one, two = nums.count(0), nums.count(1), nums.count(2)
+
+        nums[:] = zero * [0] + one * [1] + two * [2]
+
+ 
+
+        
+
+
+
+            
