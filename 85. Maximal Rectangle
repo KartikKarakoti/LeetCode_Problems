@@ -1,0 +1,35 @@
+class Solution:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        ROWS = len(matrix)
+        COLS = len(matrix[0])
+        for r in range(ROWS):
+            for c in range(COLS):
+                matrix[r][c] = int(matrix[r][c])
+        prefix = [[0] * (COLS + 1) for _ in range(ROWS + 1)]
+        for r in range(1, ROWS+1):
+            for c in range(1, COLS+1):
+                prefix[r][c] = matrix[r-1][c-1] + prefix[r-1][c] + prefix[r][c-1] - prefix[r-1][c-1]
+        
+        def is_rectange(start, end):
+            r_start, c_start = start
+            r_end, c_end = end
+            area = prefix[r_end+1][c_end+1] + prefix[r_start][c_start] - prefix[r_start][c_end+1] - prefix[r_end+1][c_start]
+            is_rectangle = area == (r_end - r_start + 1) * (c_end - c_start + 1)
+            return is_rectangle
+        
+        def get_area(start, end):
+            r_start, c_start = start
+            r_end, c_end = end
+            return (r_end - r_start + 1) * (c_end - c_start + 1)
+
+        max_area = 0
+        for start_row in range(ROWS):
+            for end_row in range(start_row, ROWS):
+                cur = 0
+                for i in range(COLS):
+                    if is_rectange((start_row, i), (end_row, i)):
+                        cur += get_area((start_row, i), (end_row, i))
+                        max_area = max(max_area, cur)
+                    else:
+                        cur = 0
+        return max_area
