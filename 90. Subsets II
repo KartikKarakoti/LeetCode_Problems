@@ -1,0 +1,16 @@
+class Solution:
+    def generate(self, index, a, ds, answer):
+        answer.append(ds[:])
+        for i in range(index, len(a)):
+            if i > index and a[i] == a[i - 1]:continue
+            ds.append(a[i])
+            self.generate(i + 1, a, ds, answer)
+            ds.pop()
+
+
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        answer = []
+        self.generate(0, nums, [], answer)
+        return answer
+        
