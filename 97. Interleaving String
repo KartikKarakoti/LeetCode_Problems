@@ -1,0 +1,32 @@
+class Solution:
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        # Check if the combined length of s1 and s2 matches the length of s3
+        if len(s1) + len(s2) != len(s3):
+            return False
+        
+        # Initialize a dynamic programming array dp
+        # dp[j] will store whether s1[0:i] and s2[0:j] can form s3[0:i+j]
+        dp = [False] * (len(s2) + 1)
+        
+        for i in range(len(s1) + 1):
+            for j in range(len(s2) + 1):
+                if i == 0 and j == 0:
+                    # Base case: Both s1 and s2 are empty, so s3 is also empty.
+                    # Set dp[j] to True.
+                    dp[j] = True
+                elif i == 0:
+                    # Base case: s1 is empty, so check if the previous dp[j-1]
+                    # is True and if s2[j-1] matches s3[i+j-1].
+                    dp[j] = dp[j - 1] and s2[j - 1] == s3[i + j - 1]
+                elif j == 0:
+                    # Base case: s2 is empty, so check if the current dp[j]
+                    # is True and if s1[i-1] matches s3[i+j-1].
+                    dp[j] = dp[j] and s1[i - 1] == s3[i + j - 1]
+                else:
+                    # General case: Check if either the previous dp[j] or dp[j-1]
+                    # is True and if the corresponding characters match s3[i+j-1].
+                    dp[j] = (dp[j] and s1[i - 1] == s3[i + j - 1]) or (dp[j - 1] and s2[j - 1] == s3[i + j - 1])
+
+        # Return the result stored in dp[len(s2)], which indicates whether
+        # s1 and s2 can form s3 by interleaving characters.
+        return dp[len(s2)]
