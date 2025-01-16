@@ -1,0 +1,28 @@
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        #initialize a hashmap to cache and store the nomber of ways to decode per character iterration backwards. Initialize with len(s) : 1 as after last digit because an empty string can only be decoded once
+        dp = {len(s) : 1}
+
+        #iterate through the string backwards for i in range(len(s) - 1, -1, -1)
+        for i in range(len(s) - 1, -1, -1):
+            #initialize variable single_digit to store s[i]. This will be used to decode single digits 
+            single_digit = s[i]
+            #check if the character in s[i] == "0"
+            if s[i] == "0":
+                #Update dp[i] to 0 as a single char "0" in itself can't be decoded
+                dp[i] = 0
+            else:
+                #Update dp[i] to the value stored in dp[i + 1]
+                dp[i] = dp[i + 1]
+
+            #Check if i + 1 is inbounds by seeing if its less than len(s)
+            if i + 1 < len(s):
+                #initialize variable double_digit to store int(s[i : i + 2]) (The string is sliced to two digits starting from i and then converted to integer). This will be used to decode double digits together 
+                double_digit = int(s[i : i + 2])
+                #Check if double_digit falls between 10 and 26
+                if 10 <= double_digit <= 26:
+                    #Update dp[i] by adding it to dp[i + 2]
+                    dp[i] += dp[i + 2]
+
+        #return dp[0] as it should contain the number of ways to decode the complete string
+        return dp[0]
