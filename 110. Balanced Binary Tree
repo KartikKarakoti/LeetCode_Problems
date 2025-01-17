@@ -1,0 +1,17 @@
+class Solution:
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        return (self.height(root) >= 0)
+    
+    def height(self, root: Optional[TreeNode]) -> int:
+        if root is None:
+            return 0  # Base case: an empty subtree has height 0
+        
+        # Recursive calls to calculate heights of left and right subtrees
+        lh, rh = self.height(root.left), self.height(root.right)
+        
+        # If either subtree is unbalanced or the current node is unbalanced, return -1
+        if lh < 0 or rh < 0 or abs(lh - rh) > 1:
+            return -1
+        
+        # If balanced, return the height of the subtree
+        return max(lh, rh) + 1
