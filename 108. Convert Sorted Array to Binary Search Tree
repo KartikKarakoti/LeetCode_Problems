@@ -1,0 +1,21 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
+        def binarySearch(array):
+            if not array:
+                return None
+            n = len(array)
+            node = TreeNode()
+            node.val = array[n//2]
+            node.left = binarySearch(array[:n//2])
+            node.right = binarySearch(array[(n//2)+1:])
+            return node
+
+        return binarySearch(nums)    
+
+        
