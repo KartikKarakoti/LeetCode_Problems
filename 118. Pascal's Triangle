@@ -1,0 +1,15 @@
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        dp = [[1],[1,1]]
+        for i in range(2,numRows):
+            curr = []
+            for j in range(i+1):
+                if j==0 or j==(i):
+                    curr.append(1)
+                else:
+                    curr.append(dp[i-1][j-1] + dp[i-1][j])
+            dp.append(curr)
+        return dp[:numRows]            
+
+
+
