@@ -1,0 +1,19 @@
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        # Manually constructing the required string : s2
+        val = "0123456789abcdefghijklmnopqrstuvwxyz"
+        s2 = ""
+        for char in s.lower():
+            if char in val:
+                s2 += char
+        
+        # 2 Pointer approach for palindrome check
+        i = 0
+        j = len(s2) - 1
+        while i < j :
+            if s2[i] != s2[j]:
+                return False
+            i += 1
+            j -= 1
+        
+        return True
