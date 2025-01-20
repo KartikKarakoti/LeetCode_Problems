@@ -1,0 +1,7 @@
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        n = list(set(nums))
+        s = sum(n)
+        result = (3 * s) - sum(nums)
+        return int(result / 2)
+     
