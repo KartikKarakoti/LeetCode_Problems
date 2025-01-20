@@ -1,0 +1,16 @@
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+        n = len(s)
+        ans = []
+        currentSolution = []
+        def choose(i):
+            if i == n:
+                ans.append(" ".join(currentSolution))
+                return
+            for j in range(i, n):
+                if s[i: j + 1] in wordDict:
+                    currentSolution.append(s[i: j + 1])
+                    choose(j + 1)
+                    currentSolution.pop()
+        choose(0)
+        return ans                
