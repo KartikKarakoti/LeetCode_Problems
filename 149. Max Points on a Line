@@ -1,0 +1,31 @@
+from collections import defaultdict
+from typing import List
+
+class Solution:
+    def maxPoints(self, points: List[List[int]]) -> int:
+        n = len(points)
+        if n <= 2:
+            return n
+        
+        max_count = 0
+        for i in range(n):
+            slopes = defaultdict(int)
+            duplicates = 1
+            for j in range(i + 1, n):
+                x1, y1 = points[i]
+                x2, y2 = points[j]
+                
+                if x1 == x2 and y1 == y2:
+                    duplicates += 1
+                elif x1 == x2:
+                     slopes['inf'] +=1
+                else:
+                    slope = (y2 - y1) / (x2 - x1)
+                    slopes[slope] += 1
+            
+            current_max = duplicates
+            if slopes:
+               current_max += max(slopes.values())
+            max_count = max(max_count, current_max)
+
+        return max_count
