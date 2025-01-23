@@ -1,0 +1,38 @@
+class Solution(object):
+    def fractionToDecimal(self, n, d):
+        """
+        :type numerator: int
+        :type denominator: int
+        :rtype: str
+        """
+        ans=""
+        
+        x,y=n,d
+        n,d=abs(n),abs(d)
+        q=n//d
+        r=n%d
+        ans+=str(q)
+        
+        if r!=0:
+          ans+="."
+          h={}
+          while r!=0:
+            
+            if r in h:
+              
+              l=h[r]
+              ans=ans[0:l]+"("+ans[l:]+")"
+              break
+              
+            h[r]=len(ans)
+            
+            r*=10
+            q=r//d
+            r=r%d
+            
+            ans+=str(q)
+        
+        return ans if (x>0 and  y>0) or (x<0 and y<0) or x==0 else "-"+ ans
+            
+          
+        
