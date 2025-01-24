@@ -1,0 +1,43 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+from collections import deque
+class BSTIterator:
+
+    def __init__(self, root: Optional[TreeNode]):
+        # initialize pointer to a non-existent number smaller than any element in the BST
+        self.cur = root
+        self.queue = deque([root])
+        self.traverse_gen = self.generator(root)
+        self.next_val = next(self.traverse_gen)        
+
+    def generator(self, root):
+        def traverse(cur):
+            self.cur = cur
+            if cur.left:
+                yield from traverse(cur.left)
+            yield cur.val
+            if cur.right:
+                yield from traverse(cur.right)
+        return traverse(root)
+        
+    def next(self) -> int:
+        cur_val = self.next_val
+        try:
+            self.next_val = next(self.traverse_gen)
+        except StopIteration:
+            self.next_val = None
+        finally:
+            return cur_val
+
+    def hasNext(self) -> bool:
+        return self.next_val is not None
+
+
+# Your BSTIterator object will be instantiated and called as such:
+# obj = BSTIterator(root)
+# param_1 = obj.next()
+# param_2 = obj.hasNext()
