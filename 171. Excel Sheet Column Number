@@ -1,0 +1,10 @@
+class Solution:
+    def titleToNumber(self, columnTitle: str) -> int:
+        col_total = 0
+
+        for char in columnTitle:
+            decimal_val = ord(char) - 64
+            col_total = col_total * 26 + decimal_val
+        
+        return col_total
+        
