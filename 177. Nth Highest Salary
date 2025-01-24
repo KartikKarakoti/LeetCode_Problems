@@ -1,0 +1,7 @@
+def nth_highest_salary(employee: pd.DataFrame, n: int) -> pd.DataFrame:
+    return employee.sort_values(
+        by='salary',
+        ascending=False,
+    ).drop_duplicates(
+        subset=['salary'],
+    ).iloc[n - 1:n][['salary']]
