@@ -1,0 +1,11 @@
+# Write your MySQL query statement below
+WITH temp AS(
+    SELECT d.name AS dept, e.name, e.salary,
+    RANK() OVER(PARTITION BY d.name ORDER BY e.salary DESC) AS ranking
+    FROM Employee AS e JOIN Department AS d
+    ON e.departmentId = d.id
+)
+
+SELECT dept AS Department, name AS Employee, salary AS Salary
+FROM temp
+WHERE ranking = 1
