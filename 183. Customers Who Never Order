@@ -1,0 +1,14 @@
+import pandas as pd
+
+def find_customers(customers: pd.DataFrame, orders: pd.DataFrame) -> pd.DataFrame:
+    # Create the filter of all the customer who doesn't appear in 'orders'
+    filter = ~customers["id"].isin(orders["customerId"])
+
+    # Filter the DataFrame to get the non-buyers
+    non_buyers = customers[filter]
+
+    # Select the proper column and rename it
+    result = non_buyers[['name']].rename(columns={'name':"Customers"})
+
+    # Return the result
+    return result
