@@ -1,0 +1,66 @@
+class Solution:
+    """
+    Both time and space complexity should be O(V+E)
+    You construct some representations of the graph which take up C*O(V+E) space
+    Further, the longest any subfunction runs is O(|V+E|) and non of these subfuctions run in a loop,
+    therefore overall runtime is O(V+E) 
+    """
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        # nodes should be based stritcly on numCourses
+        # O(V) time, going over node
+        def build_graph(node_references):
+            graph = {}
+            for n in node_references:
+                if n not in graph:
+                    graph[n] = set()
+            return graph 
+        
+        #O(E) time, since going over every edge
+        def add_edges(graph, edges, start_idx, dest_idx):
+            for e in edges:
+                start, dest = e[start_idx], e[dest_idx]
+                graph[start].add(dest)
+            return graph
+
+        #O(V) time, assuming that len() is O(1)
+        def get_available(i_graph):
+            available = set()
+            for node, in_edges in i_graph.items():
+                if len(in_edges) == 0:
+                    available.add(node)
+            return available
+        
+        # O(V+E) since go over every node some constant number of times
+        # and go over every edge some it should be once only 
+        def run_kahns(graph, in_map, available, ordering):
+            while len(available) > 0:
+                node = available.pop()
+                # node only appears in graph if there are edges
+                if node in graph:
+                    for neighbor in graph[node]:
+                        in_map[neighbor].remove(node)
+                        if len(in_map[neighbor]) == 0:
+                            available.add(neighbor)
+                ordering.append(node)
+        
+        # not considered, for debugging only 
+        def print_stuff(args):
+            for key, value in args.items():
+                print(f"{key} has value: {value}")
+        
+        # note use build_graph twice because need two separate graph representations
+        nodes = list(range(numCourses))
+        o_graph = add_edges(build_graph(nodes), prerequisites, 1, 0)
+        i_graph = add_edges(build_graph(nodes), prerequisites, 0, 1)
+        available = get_available(i_graph)
+        # print setup for debugging
+        # print_stuff({"normal graph": o_graph, "indegree graph": i_graph, "available nodes for ordering": available})
+        ordering = []
+        run_kahns(o_graph, i_graph, available, ordering)
+        # check does ordering cover all nodes, if not, then return [] otherwise return ordering
+        # O(1)
+        if len(ordering) != numCourses:
+            return []
+        else:
+            return ordering
+        
