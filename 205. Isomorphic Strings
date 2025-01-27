@@ -1,0 +1,34 @@
+class Solution:
+    def isIsomorphic(self, s: str, t: str) -> bool:
+
+        ns = []
+        nt = []
+
+        ms = []
+        mt = []
+        s = [i for i in s] 
+        t = [j for j in t]
+
+        m = 1
+        n = 1
+        for i in range(len(s)):
+            if s[i] not in ms:
+                ms.append(s[i])
+                ns.append(m)
+                m+=1
+            else:
+                o = ms.index(s[i]) 
+                ms.append(ms[o])
+                ns.append(ns[o])
+             
+            if t[i] not in mt:
+                mt.append(t[i])
+                nt.append(n)
+                n+=1
+            else:
+                o = mt.index(t[i])
+                mt.append(mt[o])
+                nt.append(nt[o])
+
+        return ns == nt
+        
