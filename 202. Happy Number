@@ -1,0 +1,18 @@
+class Solution:
+    def isHappy(self, n: int) -> bool:
+        seen=set()
+        seen.add(n)
+
+        ans=0
+        while True:
+            if n==1:
+                return True
+            ans=0
+            for num in str(n):
+                ans+=int(num)**2
+            
+            if ans in seen:
+                return False
+            else:
+                seen.add(ans)
+                n=ans
