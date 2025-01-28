@@ -1,0 +1,15 @@
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        
+        res = []
+        def rec(s,a,i,size):
+            if i>10 or s>n or size>k: return
+            if s==n and size==k:
+                res.append(a)
+                return
+            rec(s+i,a+[i], i+1, size+1)
+            rec(s,a, i+1, size)
+                
+                
+        rec(0,[],1,0)
+        return res
