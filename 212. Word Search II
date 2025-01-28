@@ -1,0 +1,45 @@
+class TrieNode:
+    def __init__(self):
+        self.children: dict[str, TrieNode] = {}
+        self.word: Optional[str] = None
+
+class Solution:
+    ans = set()
+    m = n = 0
+    dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
+    def backtrack(self, row: int, col: int, board: List[List[str]], node: TrieNode, visited):
+        if node.word != None:
+            self.ans.add(node.word)
+        
+        for dx, dy in self.dirs:
+            newRow, newCol = row + dx, col + dy
+            if 0 <= newRow < self.m and 0 <= newCol < self.n and not visited[newRow][newCol] and board[newRow][newCol] in node.children:
+                visited[newRow][newCol] = True
+                self.backtrack(newRow, newCol, board, node.children[board[newRow][newCol]], visited)
+                visited[newRow][newCol] = False
+        
+
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        def insert(root: TrieNode, word: str):
+            node = root
+            for c in word:
+                node = node.children.setdefault(c, TrieNode())
+            node.word = word
+        
+        self.m, self.n = len(board), len(board[0])
+        trie = TrieNode()
+        self.ans = set()
+
+        for word in words:
+            insert(trie, word)
+        
+        visited = [[False] * self.n for _ in range(self.m)]
+        for i, j in product(range(self.m), range(self.n)):
+            if board[i][j] in trie.children:
+                visited[i][j] = True
+                self.backtrack(i, j, board, trie.children[board[i][j]], visited)
+                visited[i][j] = False
+
+        return list(self.ans)
+        
