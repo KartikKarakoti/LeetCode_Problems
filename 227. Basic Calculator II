@@ -1,0 +1,48 @@
+class Solution:
+    def calculate(self, s: str) -> int:
+
+        # truncate towards 0
+
+        # use cur_number, last_num and result to replace stack
+        # prev_op: only +- can update res
+        # 1. if number: cal num
+        # 2. if op: 
+        #       if +-: add last_num into result, update last_num to cur_num
+        #       if */: update last_num with cur_num
+        #       update prev_op and cur_num
+
+        prev_op = '+'
+        cur_num = 0
+        last_num = 0
+        res = 0
+
+        for i in range(len(s)): # digit, space and ops
+            ch = s[i]
+            if ch.isdigit():
+                cur_num = cur_num * 10 + int(ch)
+            if ch in ['+', '-', '*', '/'] or i == len(s) - 1:
+                if prev_op == '+':
+                    res += last_num
+                    last_num = cur_num
+                elif prev_op == '-':
+                    res += last_num
+                    last_num = -cur_num
+                elif prev_op == '*':
+                    last_num = last_num * cur_num
+                elif prev_op == '/':
+                    last_num = (int(last_num/cur_num)) # truncate towards 0: -x and x?
+                cur_num = 0
+                prev_op = ch
+
+        res += last_num # when you exit the loop, there is still one last_num that has not been added, bc there is no operatort at the end of the array
+        
+        return res
+
+        # time: O(n)
+        # space: O(1)
+
+        # stack: O(n)
+        # space: O(n)
+    
+
+        
