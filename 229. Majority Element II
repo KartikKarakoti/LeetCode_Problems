@@ -1,0 +1,13 @@
+class Solution:
+    def majorityElement(self, nums: List[int]) -> List[int]:
+        ans=[]
+        majority=len(nums)//3
+        counter=Counter(nums)
+        for k,v in counter.items():
+            if v>majority:
+                ans.append(k)
+        if len(nums)==1:
+            return nums
+        return ans            
+
+       
