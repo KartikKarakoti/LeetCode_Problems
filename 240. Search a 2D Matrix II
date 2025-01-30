@@ -1,0 +1,8 @@
+class Solution:
+    def searchMatrix(self, l: List[List[int]], n: int) -> bool:
+        m=[]
+        for i in l:
+            for j in i:
+                m.append(j)
+        if n in m:
+            return True
