@@ -1,0 +1,31 @@
+class MyQueue:
+
+    def __init__(self):
+        self.st1 = []  # Stack 1 for incoming elements 📥
+        self.st2 = []  # Stack 2 for outgoing elements 📤
+
+    def push(self, x: int) -> None:
+        self.st1.append(x)
+
+    def pop(self) -> int:
+        if not self.st2:
+            while self.st1:
+                self.st2.append(self.st1.pop())  # Transfer elements to st2 🚀
+        return self.st2.pop()
+
+    def peek(self) -> int:
+        if not self.st2:
+            while self.st1:
+                self.st2.append(self.st1.pop())  # Prepare st2 for peeking 👀
+        return self.st2[-1]
+
+    def empty(self) -> bool:
+        return not self.st1 and not self.st2  # Check if both stacks are empty 🚫
+
+# Example usage:
+# obj = MyQueue()
+# obj.push(1)
+# obj.push(2)
+# print(obj.peek())  # Outputs 1
+# print(obj.pop())   # Outputs 1
+# print(obj.empty()) # Outputs False
