@@ -1,0 +1,16 @@
+# class Solution:
+#     def countDigitOne(self, n: int) -> int:
+#         count = 0
+#         for i in range(1, n + 1):
+#             count += str(i).count('1')
+#         return count
+class Solution:
+    def countDigitOne(self, n: int) -> int:
+        count = 0
+        multiplier = 1
+        while multiplier <= n:
+            divider = multiplier * 10
+            count += (n // divider) * multiplier
+            count += min(max(n % divider - multiplier + 1, 0), multiplier)
+            multiplier *= 10
+        return count
