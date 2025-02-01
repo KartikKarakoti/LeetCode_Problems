@@ -1,0 +1,13 @@
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        last_non_zero_found_at = 0  # Pointer for placing non-zero elements
+
+        # Step 1: Move all non-zero elements forward
+        for i in range(len(nums)):
+            if nums[i] != 0:
+                nums[last_non_zero_found_at] = nums[i]
+                last_non_zero_found_at += 1
+
+        # Step 2: Fill the rest with zeros
+        for i in range(last_non_zero_found_at, len(nums)):
+            nums[i] = 0
