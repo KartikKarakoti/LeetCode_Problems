@@ -1,0 +1,18 @@
+from functools import lru_cache
+
+class Solution:
+    def numSquares(self, n: int) -> int:
+        @lru_cache(None)
+        def dfs(remaining):
+            if remaining == 0:
+                return 0
+            if remaining < 0:
+                return float('inf')
+            minSteps = remaining  # we need at most 'remaining' number of ones
+            currNum = 1
+            while currNum ** 2 <= remaining:
+                minSteps = min(minSteps, 1 + dfs(remaining - currNum ** 2))  # 1 because  we chose that number and looking further
+                currNum += 1
+            return minSteps
+        
+        return dfs(n)
