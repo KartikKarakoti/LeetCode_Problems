@@ -1,0 +1,20 @@
+class Solution:
+    def maxCoins(self, nums: List[int]) -> int:
+        nums.insert(0,1)
+        nums.append(1)
+        def recursive(i,j,seen):
+            if i==j:
+                return 0
+            if (i,j) in seen:
+                return seen[(i,j)]
+
+            m=float('-inf')
+            for k in range(i,j):
+                cur=nums[i-1]*nums[k]*nums[j]
+                left=recursive(i,k,seen)
+                right=recursive(k+1,j,seen)
+                m=max(m,cur+left+right)
+            seen[(i,j)]=m
+            return m
+        seen={}
+        return recursive(1,len(nums)-1,seen)
