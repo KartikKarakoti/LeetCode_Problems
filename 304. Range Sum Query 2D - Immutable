@@ -1,0 +1,31 @@
+class NumMatrix:
+
+    def __init__(self, matrix):
+
+        self.matrix =  matrix
+        m,n = len(matrix),len(matrix[0])
+		
+		#note that self.matrix and matrix point to the same matrix (that's how python works)
+		#so no need to create a new matrix, just modify the existing one
+		
+        for j in range(1,n):
+            matrix[0][j] += matrix[0][j-1] #calculating for first row
+
+        for i in range(1,m):
+
+            rowSum = matrix[i][0]
+            matrix[i][0] += matrix[i-1][0] #first cell of the row
+
+            for j in range(1,n):
+
+                rowSum += matrix[i][j]
+                matrix[i][j] = matrix[i-1][j] + rowSum #rest of the cells
+
+    def sumRegion(self, row1, col1, row2, col2):
+
+        toReturn = self.matrix[row2][col2]
+        toReturn -= self.matrix[row1 - 1][col2] if row1 != 0 else 0
+        toReturn -= self.matrix[row2][col1 - 1] if col1 != 0 else 0
+        toReturn += self.matrix[row1 - 1][col1 - 1] if row1 != 0  and col1 != 0 else 0
+
+        return toReturn
