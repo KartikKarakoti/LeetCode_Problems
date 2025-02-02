@@ -1,0 +1,50 @@
+class TreeNode:
+    def __init__(self,l,r,val=0,left=None,right=None):
+        self.val=val
+        self.left=left
+        self.right=right
+        self.l=l
+        self.r=r
+
+class Tree:
+    def __init__(self,root=None):
+        self.root=root
+    
+    def insert(self,arr,l,r):
+        if(l==r):
+            return TreeNode(l,r,arr[l],None,None)
+        left=self.insert(arr,l,(l+r)//2)
+        right=self.insert(arr,((l+r)//2)+1,r)
+        return TreeNode(l,r,left.val+right.val,left,right)
+
+    def update(self,node,ind,val):
+        if(node.l==node.r and ind==node.l):
+            node.val=val
+            return node.val
+        if(node.l>ind or node.r<ind):return node.val
+        node.val=self.update(node.left,ind,val)+self.update(node.right,ind,val)
+        return node.val
+
+    def query(self,node,l,r):
+        if(node.r<l or node.l>r):return 0
+        if(node.l>=l and node.r<=r):return node.val
+        return self.query(node.left,l,r)+self.query(node.right,l,r)
+        
+
+class NumArray:
+
+    def __init__(self, nums: List[int]):
+        self.tree=Tree()
+        self.tree.root=self.tree.insert(nums,0,len(nums)-1)
+
+    def update(self, index: int, val: int) -> None:
+        self.tree.update(self.tree.root,index,val)
+
+    def sumRange(self, left: int, right: int) -> int:
+        return self.tree.query(self.tree.root,left,right)
+
+
+# Your NumArray object will be instantiated and called as such:
+# obj = NumArray(nums)
+# obj.update(index,val)
+# param_2 = obj.sumRange(left,right)
