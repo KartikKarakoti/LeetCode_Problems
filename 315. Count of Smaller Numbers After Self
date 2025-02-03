@@ -1,0 +1,21 @@
+class Solution:
+    def countSmaller(self, nums: List[int]) -> List[int]:
+        def binary_search(sorted_list, target):
+            left, right = 0, len(sorted_list)
+            while left < right:
+                mid = (left + right) // 2
+                if sorted_list[mid] < target:
+                    left = mid + 1
+                else:
+                    right = mid
+            return left
+
+        sorted_list = []
+        result = []
+
+        for num in reversed(nums):
+            position = binary_search(sorted_list, num)
+            result.append(position)
+            sorted_list.insert(position, num)
+
+        return result[::-1]
