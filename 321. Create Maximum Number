@@ -1,0 +1,39 @@
+class Solution:
+    def maxNumber(self, nums1: List[int], nums2: List[int], k: int) -> List[int]:
+        answer = []
+
+        for i in range(k + 1):
+            max_nums1 = self.getSubsequence(nums1, i)
+            max_nums2 = self.getSubsequence(nums2, k - i)
+
+            if len(max_nums1) + len(max_nums2) < k:
+                continue
+            
+            stack = []
+
+            curr1 = max_nums1[:]
+            curr2 = max_nums2[:]
+
+            while curr1 or curr2:
+                maxi = max(curr1, curr2)
+                stack.append(maxi[0])
+                maxi.pop(0)
+                
+            answer = max(answer, stack)
+
+        return answer
+    
+    def getSubsequence(self, array, k):
+        answer = []
+
+        array = array[:]
+        while array:
+            while answer and answer[-1] < array[0] and k - len(answer) < len(array):
+                answer.pop(-1)
+            
+            if len(answer) < k:
+                answer.append(array[0])
+            
+            array.pop(0)
+        
+        return answer
