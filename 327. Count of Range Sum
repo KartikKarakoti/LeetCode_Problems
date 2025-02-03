@@ -1,0 +1,10 @@
+from sortedcontainers import SortedList
+class Solution:
+    def countRangeSum(self, nums: List[int], lower: int, upper: int) -> int:
+        sl = SortedList()
+        pre = res = 0
+        for n in nums:
+            sl.add(pre)
+            pre+=n
+            res+= sl.bisect(pre-lower) - sl.bisect(pre-upper-1)
+        return res
