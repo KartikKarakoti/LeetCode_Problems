@@ -1,0 +1,29 @@
+class Solution:
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        flight_map = collections.defaultdict(list)
+        result = []
+
+        # Populate the flight map with each departure and arrival
+        for departure, arrival in tickets:
+            flight_map[departure].append(arrival)
+
+        # Sort each list of destinations in reverse lexicographical order
+        for departure in flight_map:
+            flight_map[departure].sort(reverse=True)
+
+        # Perform DFS traversal
+        def dfsTraversal(current):
+            destinations = flight_map[current]
+
+            # Traverse all destinations in the order of their lexicographical
+            # sorting
+            while destinations:
+                next_destination = destinations.pop()
+                dfsTraversal(next_destination)
+
+            # Append the current airport to the result after all destinations
+            # are visited
+            result.append(current)
+
+        dfsTraversal("JFK")
+        return result[::-1]
