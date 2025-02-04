@@ -1,0 +1,16 @@
+class Solution:
+    def palindromePairs(self, words: List[str]) -> List[List[int]]:
+        mp = {x: i for i, x in enumerate(words)} # val-to-pos mapping 
+        
+        ans = []
+        for i, word in enumerate(words): 
+            for ii in range(len(word)+1): 
+                prefix = word[:ii]
+                if prefix == prefix[::-1]: # palindromic prefix 
+                    key = word[ii:][::-1]
+                    if key in mp and mp[key] != i: ans.append([mp[key], i])
+                suffix = word[~ii:]
+                if ii < len(word) and suffix == suffix[::-1]: # palindromic suffix 
+                    key = word[:~ii][::-1]
+                    if key in mp and mp[key] != i: ans.append([i, mp[key]])
+        return ans 
