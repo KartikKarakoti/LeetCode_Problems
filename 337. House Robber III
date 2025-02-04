@@ -1,0 +1,11 @@
+class Solution:
+    def rob(self, root: Optional[TreeNode]) -> int:
+        def dfs(root):
+            if not root: return [0,0]
+            leftpair,rightpair=dfs(root.left),dfs(root.right)
+            withroot,without=root.val+leftpair[1]+rightpair[1],max(leftpair)+max(rightpair)
+            return [withroot,without]
+        return max(dfs(root))
+    #please upvote me it would encourage me alot
+
+        
