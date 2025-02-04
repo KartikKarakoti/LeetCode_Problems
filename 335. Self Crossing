@@ -1,0 +1,18 @@
+class Solution:
+    def isSelfCrossing(self, distance: List[int]) -> bool:
+        """
+        1st way to cross NWSE , East meets north, E and W must be same length
+        and N>=S
+        2nd way NWSEN , North overlaps with north , E==W and S<= N1+N2
+        3rd way NWSENW , West overlaps with first North, W1<
+        """
+        if(len(distance)<=3):
+            return False
+        for i in range(3,len(distance)):
+            if(distance[i]>=distance[i-2] and distance[i-3]>=distance[i-1]):
+                return True
+            if(i>=4 and distance[i-1]==distance[i-3] and distance[i-2]<=distance[i]+distance[i-4]):
+                return True
+            if(i>=5 and distance[i-4]<distance[i-2] and distance[i]+distance[i-4]>=distance[i-2] and distance[i-1]+distance[i-5]>=distance[i-3] and distance[i-1]<=distance[i-3]):
+                return True
+        return False
