@@ -1,0 +1,21 @@
+class SummaryRanges(object):
+
+    def __init__(self):
+        self.intervals = []
+        self.has = set()
+    
+    def addNum(self, val):
+        if val in self.has: return
+        self.has.add(val)
+        heapq.heappush(self.intervals, [val, val])
+    
+    def getIntervals(self):
+        res = []
+        while self.intervals:
+            start, end = heapq.heappop(self.intervals)
+            if not res or start > res[-1][1]+1:
+                res.append([start, end])
+            else:
+                res[-1][1] = max(res[-1][1], end)
+        self.intervals = res
+        return res
