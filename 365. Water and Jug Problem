@@ -1,0 +1,13 @@
+class Solution:
+    def canMeasureWater(self, x: int, y: int, target: int) -> bool:
+        if target > x + y:
+            return False
+        visited = set()
+        def dfs(total):
+            if total == target:
+                return True
+            if total < 0 or total > x + y or total in visited:
+                return False # stop exploring
+            visited.add(total)
+            return dfs(total + x) or dfs(total + y) or dfs(total - x) or dfs(total -y)
+        return dfs(0)
