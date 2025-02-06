@@ -1,0 +1,23 @@
+class Solution:
+    def kSmallestPairs(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
+        result = []
+        heap = []
+        
+        # Push the sums of each element in nums1 with the first element in nums2 into the heap
+        for num in nums1:
+            heapq.heappush(heap, (num + nums2[0], 0))
+        
+        # Pop the smallest pair from the heap and add it to the result list
+        while k > 0 and heap:
+            nums_sum, index = heapq.heappop(heap)
+            result.append([nums_sum - nums2[index], nums2[index]])
+            
+            # If there are more elements in nums2, push the sum of the current element in nums1
+            # with the next element in nums2 into the heap
+            if index + 1 < len(nums2):
+                heapq.heappush(heap, (nums_sum - nums2[index] + nums2[index + 1], index + 1))
+            
+            # Decrease the number of pairs to be returned
+            k -= 1
+        
+        return result
