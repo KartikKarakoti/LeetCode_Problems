@@ -1,0 +1,23 @@
+class Solution:
+    def combinationSum4(self, nums: List[int], target: int) -> int:
+        ## RC ## 
+        ## APPROACH : DP ##
+        # 1. Base case : Number of combinations to make 0 is 0.
+        # 2. consider nums= {1,2,3}
+        # 3. target = 1, combinations = {1}
+        # 4. target = 2, combinations = {1,1}, {2}
+        # 5. target = 3, combinations = {1,1,1} , {1,2}, {2,1}, {3}
+        # 6. If number is in the list, you can directly count it as one combination
+        # 7. else include all the combinations of target - nums[i]
+        
+		## TIME COMPLEXITY : O(N^2) ##
+		## SPACE COMPLEXITY : O(N) ##
+
+        dp = [0] * (target+1) 
+        for i in range(1, target+1):            # offset from 1 to skip base case (first element)
+            for n in nums:
+                if( n == i):                    # If number is in the list, you can directly count it as one combination
+                        dp[i] += 1
+                if n < i:                       
+                        dp[i] += dp[i-n]        # include all the combinations of target i-n.
+        return dp[-1]
