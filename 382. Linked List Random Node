@@ -1,0 +1,13 @@
+class Solution:
+
+    def __init__(self, head: ListNode):
+        self.res = []
+        curr = head
+        while curr:
+            self.res.append(curr)
+            curr = curr.next
+        self.length = len(self.res)
+
+    def getRandom(self) -> int:
+        index = random.randint(0, self.length - 1)
+        return self.res[index].val
