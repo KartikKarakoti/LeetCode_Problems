@@ -1,0 +1,24 @@
+import random
+class RandomizedCollection(object):
+
+    def __init__(self):
+        self.l, self.d = [], collections.defaultdict(set)
+
+    def insert(self, val):
+        self.d[val].add(len(self.l))
+        self.l.append(val)
+        return len(self.d[val])==1
+
+    def remove(self, val):
+        if val not in self.d:
+            return False
+        i, newVal = self.d[val].pop(), self.l[-1]
+        len(self.d[val]) > 0 or self.d.pop(val, None)
+        if newVal in self.d:
+            self.d[newVal] = (self.d[newVal] | {i}) - {len(self.l)-1}
+        self.l[i] = newVal
+        self.l.pop()
+        return True
+
+    def getRandom(self):
+        return random.choice(self.l)
