@@ -1,0 +1,16 @@
+class Solution:
+    def deserialize(self, s: str) -> NestedInteger:
+        def toNI(xs) -> NestedInteger:
+            # Case where xs is a single integer.
+            if isinstance(xs, int):
+                return NestedInteger(xs)
+            # Case where xs is a list of integers and/or lists.
+            assert(isinstance(xs, list))
+            n = NestedInteger()
+            for x in xs:
+                # For every element in the list, convert it to a NestedInteger
+                # and add it to `n`.
+                n.add(toNI(x))
+            return n
+			
+        return toNI(json.loads(s))
