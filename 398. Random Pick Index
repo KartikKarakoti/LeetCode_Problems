@@ -1,0 +1,33 @@
+from random import randint
+
+class Solution:
+    def __init__(self, nums: List[int]):
+        # save nums array for reservoir sampling for the first
+        # call to pick
+        self.nums = nums
+        # save lists of indices to skip reservoir sampling
+        # after we've done one pick
+        self.indices = defaultdict(list)
+
+    def pick(self, target: int) -> int:
+        # if we've already called pick, just randomly select
+        # from the saved index list
+        if target in self.indices:
+            return self.indices[target][
+                randint(0, len(self.indices[target])-1)
+            ]
+        
+        # otherwise, iterate through the whole list for reservoir
+        # sampling
+        r = None
+        count = 0
+
+        for i, n in enumerate(self.nums):
+            if n == target:
+                if r is None or randint(0, count) == 0:
+                    r = i
+                count += 1
+
+            # build up lists of indices
+            self.indices[n].append(i)
+        return r
