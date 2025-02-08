@@ -1,0 +1,33 @@
+class Solution:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        # Vi = Ai / Bi
+        d = defaultdict(list)
+        for i in range(len(equations)):
+            d[equations[i][0]].append((equations[i][1], values[i]))
+            d[equations[i][1]].append((equations[i][0], 1/values[i]))
+
+        def dfs(graph, start, target):
+            if start not in graph or target not in graph:
+                return -1
+
+            stack = []
+            stack.append((start,1))
+            visit = set()
+
+            while stack:
+                node, ans = stack.pop()
+                visit.add(node)
+                if node == target:
+                    return ans
+                    break
+                for neighbour, div in graph[node]:
+                    if neighbour not in visit:
+                        stack.append((neighbour,ans*div))
+
+            return -1
+
+        print(d)
+        ans = []
+        for x,y in queries:
+            ans.append(dfs(d,x,y))
+        return ans
