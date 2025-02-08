@@ -1,0 +1,11 @@
+class Solution:
+    def lastRemaining(self, n: int) -> int:
+        # f: 1 to n; g: n to 1
+        # f(n, left) = 2 * f(n//2, right)
+        # f(n, right) = g(n ,left) = n + 1 - f(n, left)
+        # from the above 2, we have: f(n, left) = 2 * (n//2 + 2 - f(n//2, left))
+
+        if n == 1:
+            return 1
+        else:
+            return 2 * (1 + n // 2 - self.lastRemaining(n // 2))
