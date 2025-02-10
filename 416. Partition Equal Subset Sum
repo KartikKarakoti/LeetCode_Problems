@@ -1,0 +1,26 @@
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        #Check if sum(nums) divided by 2 has a remainder
+        if sum(nums) % 2:
+            #return False as its impossible to split
+            return False
+
+        #Initialize target to sum(nums) divided in half
+        target = sum(nums) // 2
+
+        #Initialize dp array to [False] * (target + 1). This will later store all the bool values of whether we can add to an index in dp from subset of nums array
+        dp = [False] * (target + 1)
+        #Initialize dp[0] to True as a subset with no elements can add to 0
+        dp[0] = True
+        
+        #Iterate nums for n
+        for n in nums:
+            #Iterate from target to n - 1 in reverse for 1. This ensures that each number is only used once per subset.
+            for i in range(target, n - 1, - 1):
+                #Check if dp[i - n]
+                if dp[i - n]:
+                    #Update dp[i] = True, as this means a subset of nums can add up to i
+                    dp[i] = True
+
+        #return dp[target]
+        return dp[target]
