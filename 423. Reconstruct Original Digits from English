@@ -1,0 +1,19 @@
+class Solution:
+    def originalDigits(self, s: str) -> str:
+        c = collections.Counter(s)
+        
+        digit_count = [0] * 10
+        digit_count[0] = c['z']
+        digit_count[2] = c['w']
+        digit_count[4] = c['u']
+        digit_count[6] = c['x']
+        digit_count[8] = c['g']
+        
+        digit_count[3] = c['h'] - digit_count[8]
+        digit_count[5] = c['f'] - digit_count[4]
+        digit_count[7] = c['s'] - digit_count[6]
+        
+        digit_count[9] = c['i'] - digit_count[5] - digit_count[6] - digit_count[8]
+        digit_count[1] = c['n'] - digit_count[9] * 2 - digit_count[7]
+        
+        return "".join([str(idx) * cnt for idx, cnt in enumerate(digit_count) if cnt > 0])
