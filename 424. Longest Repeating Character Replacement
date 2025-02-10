@@ -1,0 +1,21 @@
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        
+        # Maintain a dictionary that keeps track of last 'window' characters
+        # See if 'window' size minus occurrences of the most common char is <= k, if so it's valid
+        # Run time is O(length of string * size of alphabet)
+		# Space is O(size of alphabet)
+        
+        d = {}
+        window = 0
+        
+        for i, char in enumerate(s):
+            d[char] = d.get(char, 0) + 1
+            if window+1 - max(d.values()) <= k:
+                window += 1
+            else:
+                d[s[i-window]] -= 1
+        
+        return window
+        
+  
