@@ -1,0 +1,13 @@
+class Solution:
+    def fizzBuzz(self, n: int) -> List[str]:
+        new_list=[i for i in range(1,n+1)]
+        for i in range(len(new_list)):
+            if new_list[i] %3==0 and new_list[i] %5==0:
+                new_list[i]='FizzBuzz'
+            elif new_list[i] %3==0:
+                new_list[i]='Fizz'
+            elif new_list[i] %5 == 0:
+                new_list[i]='Buzz'
+            else:
+                new_list[i]=str(new_list[i])
+        return new_list
