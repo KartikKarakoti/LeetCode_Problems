@@ -1,0 +1,53 @@
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        # Early return if s is shorter than p
+        if len(s) < len(p):
+            return []
+
+        # Initialize character counts for p and the current window in s
+        p_char_count = [0] * 26  # Counts of each character in p
+        window_char_count = [0] * 26  # Counts of each character in the current window of s
+        result_indices = []  # List to store starting indices of anagrams
+
+        # Populate the character count for p
+        for char in p:
+            p_char_count[ord(char) - ord('a')] += 1
+
+        # Populate the initial window character count
+        for i in range(len(p)):
+            window_char_count[ord(s[i]) - ord('a')] += 1
+
+        # Initialize the difference counter between p_char_count and window_char_count
+        differences = 0
+        for i in range(26):
+            if p_char_count[i] != window_char_count[i]:
+                differences += 1
+
+        # If there are no differences, the first window is an anagram
+        if differences == 0:
+            result_indices.append(0)
+
+        # Slide the window over string s
+        for i in range(len(p), len(s)):
+            new_char_index = ord(s[i]) - ord('a')
+            old_char_index = ord(s[i - len(p)]) - ord('a')
+
+            # Add new character to window
+            window_char_count[new_char_index] += 1
+            if window_char_count[new_char_index] == p_char_count[new_char_index]:
+                differences -= 1
+            elif window_char_count[new_char_index] - 1 == p_char_count[new_char_index]:
+                differences += 1
+
+            # Remove old character from window
+            window_char_count[old_char_index] -= 1
+            if window_char_count[old_char_index] == p_char_count[old_char_index]:
+                differences -= 1
+            elif window_char_count[old_char_index] + 1 == p_char_count[old_char_index]:
+                differences += 1
+
+            # If counts match, record the starting index
+            if differences == 0:
+                result_indices.append(i - len(p) + 1)
+
+        return result_indices
