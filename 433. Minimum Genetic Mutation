@@ -1,0 +1,31 @@
+class Solution:
+    def get_dif(self, s1: str, s2: str) -> int:
+        dif_len = 0
+        for i, j in zip(s1, s2):
+            if i != j:
+                dif_len += 1
+        return dif_len
+
+    def minMutation(
+        self, startGene: str, endGene: str, bank: list[str] | set[str]
+    ) -> int:
+        if startGene == endGene:
+            return 0
+
+        if not isinstance(bank, set):
+            bank = set(bank)  # set needs to fast excude mutation
+
+        min_mutations = -1  # to endGene
+        for i in bank:
+            # try every mutation with one item differense with current gene
+            if self.get_dif(i, startGene) != 1:
+                continue
+
+            # recursive call with accepting current mutation and excuding it from bank
+            res = self.minMutation(i, endGene, bank - {i})
+            if res == 0:  # early exit if found one mutation to endGene
+                return 1
+            if res != -1 and (res < min_mutations or min_mutations == -1):
+                min_mutations = res + 1
+
+        return min_mutations
