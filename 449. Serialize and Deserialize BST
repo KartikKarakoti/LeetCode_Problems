@@ -1,0 +1,25 @@
+class Codec:
+    SEP = ","
+
+    def serialize(self, root: TreeNode) -> str:
+        def postorder(n: TreeNode = root):
+            if not n:
+                return
+            yield from postorder(n.left)
+            yield from postorder(n.right)
+            yield n.val
+            
+        return Codec.SEP.join(map(str, postorder()))
+
+
+    def deserialize(self, data: str) -> TreeNode:
+        data = [int(x) for x in data.split(Codec.SEP) if x]
+        
+        def helper(lo=-1, hi=10_001) -> TreeNode:
+            if not data or data[-1] < lo or data[-1] > hi:
+                return None
+            n, v = TreeNode(data[-1]), data.pop()
+            n.right, n.left = helper(v, hi), helper(lo, v)
+            return n
+        
+        return helper()
