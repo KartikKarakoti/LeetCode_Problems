@@ -1,0 +1,39 @@
+class Solution:
+    def numberOfBoomerangs(self, points: List[List[int]]) -> int:
+        # compute distance between all points
+        # for each point, map distance => list of indexes => count number of pairs
+        # i: j, k => 2 boomerangs
+        self.distances = {}
+        count = 0
+
+        n = len(points)
+        for i in range(n):
+            sameDistances = {}
+            for j in range(n):
+                if j == i:
+                    continue
+                
+                larger = max(i, j)
+                smaller = min(i, j)
+
+                if (smaller, larger)  in self.distances:
+                    distance = self.distances[(smaller, larger)]
+                else:
+                    # compute square of distance
+                    a = points[smaller]
+                    b = points[larger]
+                    distance = (a[0] - b[0])** 2 + (a[1] - b[1])**2
+                    self.distances[(smaller, larger)] = distance
+
+                if distance in sameDistances:
+                    sameDistances[distance].append(j)
+                else:
+                    sameDistances[distance] = [j]
+
+            for distance in sameDistances:
+                candidates = sameDistances[distance]
+                if len(candidates) > 1:
+                    count += len(candidates) * (len(candidates) - 1)
+
+        return count
+        
