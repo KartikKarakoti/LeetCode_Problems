@@ -1,0 +1,5 @@
+class Solution:
+    def minMoves(self, nums: List[int]) -> int:
+        min_element = min(nums)
+        moves = sum(nums) - len(nums) * min_element
+        return moves
