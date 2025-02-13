@@ -1,0 +1,20 @@
+class Solution:
+    def fourSumCount(self, nums1: List[int], nums2: List[int], nums3: List[int], nums4: List[int]) -> int:
+        # use a dict to store the number of ways that the sum of nums3 and nums4 elements that can make up the other half to sum to 0.
+        memo = {}
+        for i in nums3:
+            for j in nums4:
+                item = 0 - i - j
+                if item not in memo:
+                    memo[item] = 1
+                else:
+                    memo[item] += 1
+        # declare a result var
+        result = 0
+        # check the other half
+        for i in nums1:
+            for j in nums2:
+                re = i + j 
+                if re in memo:
+                    result += memo[re]
+        return result
