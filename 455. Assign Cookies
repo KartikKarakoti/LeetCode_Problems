@@ -1,0 +1,14 @@
+class Solution:
+    def findContentChildren(self, g: List[int], s: List[int]) -> int:
+        l, r = 0, 0  # Pointers for children and cookies
+        g.sort()
+        s.sort()
+        
+        while r < len(s) and l < len(g):
+            while r < len(s) and s[r] < g[l]:  # Find a cookie that can satisfy g[l]
+                r += 1  
+            if r < len(s):  # If a valid cookie is found, assign it
+                l += 1  
+                r += 1  
+        
+        return l
