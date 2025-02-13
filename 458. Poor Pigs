@@ -1,0 +1,9 @@
+class Solution:
+    def poorPigs(self, buckets: int, minutesToDie: int, minutesToTest: int) -> int:
+        # return math.ceil(math.log(buckets, 1 + minutesToTest // minutesToDie))
+        # math.log(125, 3) = 3.000004 which make it fail
+        log, tmp, base = 0, 1, 1 + minutesToTest // minutesToDie
+        while tmp < buckets:
+            tmp *= base
+            log += 1
+        return log
