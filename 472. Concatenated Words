@@ -1,0 +1,28 @@
+class Solution:
+    def findAllConcatenatedWordsInADict(self, words: List[str]) -> List[str]:
+        #Simple solution using DP memorization in array
+        d={}
+        for i in words:
+            d[i]=1
+        def traceWord(word):
+            n=len(word)
+            l=[False]*(n+1)
+            l[0]=True
+            tr=[0]
+            for i in range(1,n+1):
+                if i==n:
+                    tr=tr[1:]
+                for k in tr:
+                    if word[k:i] in d:
+                        l[i]=True
+                        tr.append(i)
+                        break
+            return l
+        op=[]
+        for x in words:
+            if traceWord(x)[-1]==True:
+                op.append(x)
+        return(op)
+
+
+        
