@@ -1,0 +1,22 @@
+class Solution:
+    def validIPAddress(self, queryIP: str) -> str:
+        if '.' in queryIP: #IPv4
+            splitStr=[x for x in queryIP.split('.')]
+            if len(splitStr) == 4:
+                for x in splitStr:
+                    if not x or not x.isdigit() or (len(x) > 1 and x.startswith('0')):
+                        return "Neither"
+                    intx=int(x)
+                    if intx > 255 or intx < 0:
+                        return "Neither"
+                return "IPv4"
+        elif ':' in queryIP: #IPv6
+            if queryIP.startswith('0'):
+                return "Neither"
+            splitStr=[x for x in queryIP.split(':')]
+            if len(splitStr) == 8:
+                for x in splitStr:
+                    if not x or len(x) > 4 or not all(c in string.hexdigits for c in x):
+                        return "Neither"
+                return "IPv6"
+        return "Neither"
