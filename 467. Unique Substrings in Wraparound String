@@ -1,0 +1,16 @@
+class Solution:
+    def findSubstringInWraproundString(self, s: str) -> int:
+      count, n, so_far = {}, len(s), 1
+      count[s[0]] = so_far 
+      for i in range(1,n):
+        curr, prev = s[i], s[i-1]
+        if (ord(curr) - ord(prev) == 1) or (curr == 'a' and prev == 'z'): so_far += 1 
+        else : so_far = 1 
+        if curr in count : count[curr] = max(count[curr], so_far) 
+        elif not (curr in count) : count[curr] = so_far 
+
+      # print(count)
+      return sum(count.values())
+
+
+        
