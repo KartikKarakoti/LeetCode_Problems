@@ -1,0 +1,26 @@
+class Solution:
+    def smallestGoodBase(self, n: str) -> str:
+        num = int(n)
+        max_len = math.floor(math.log(num, 2)) + 1
+        
+        # Search for the smallest possible base m
+        for k in range(max_len, 1, -1):
+            left, right = 2, num - 1
+            
+            # Solve for m using binary search
+            while left <= right:
+                mid = (left + right) // 2
+                s = 0
+                for i in range(k):
+                    s = s * mid + 1
+                
+                if s == num:
+                    return str(mid)
+                
+                elif s < num:
+                    left = mid + 1
+                
+                else:
+                    right = mid - 1
+        
+        return str(num - 1)
