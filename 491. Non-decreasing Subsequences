@@ -1,0 +1,14 @@
+class Solution(object):
+    def findSubsequences(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        if not nums: return nums
+        curr = [[nums[0]]]
+        for x in nums[1:]:
+            curr += [y+[x] for y in curr if x>=y[-1]]
+            curr += [[x]]
+        curr = [tuple(x) for x in curr if len(x)>=2]
+        return list(set(curr))
+	
