@@ -1,0 +1,27 @@
+class Solution:
+
+    def __init__(self, rects: List[List[int]]):
+        self.rects = rects
+
+        self.areas = []
+
+        for x1, y1, x2, y2 in rects:
+            area = (x2 - x1 + 1) * (y2 - y1 + 1)
+            self.areas.append(area)
+
+        total = sum(self.areas)
+
+        self.prob = [i / total for i in self.areas]
+
+    def pick(self) -> List[int]:
+        choice = random.choices(self.rects, weights=self.prob)[0]
+        x1, y1, x2, y2 = choice
+        x, y = random.randint(x1, x2), random.randint(y1, y2)
+        return x, y
+
+        
+
+
+# Your Solution object will be instantiated and called as such:
+# obj = Solution(rects)
+# param_1 = obj.pick()
