@@ -1,0 +1,46 @@
+class Solution:
+    def predictTheWinner(self, nums: List[int]) -> bool:
+        
+        #this will be recursive helper function that will predict winner of game! 
+        def helper(i, j, cumOne, cumTwo, isOneTurn): 
+            #base case: only one option to choose for current turn's player! 
+            if i == j:
+                #finalize score! 
+                if isOneTurn:
+                    cumOne += nums[i]
+                else:
+                    cumTwo += nums[i]
+                #player 1 wins 
+                if cumOne >= cumTwo:
+                    return True 
+                else:
+                    return False 
+            
+            #if it's not base case, then we consider two moves current player can make!
+            #Either choose nums[i] vs. nums[j]
+
+            if isOneTurn:
+                #player 1 choose ith element! 
+                firstSubRes = helper(i+1, j, cumOne + nums[i], cumTwo, False)
+                secondSubRes = helper(i, j-1, cumOne + nums[j], cumTwo, False)
+                #now if at least one of the two rec. calls resulted in player1 winning
+                #=> by returning True result, then the game played from current 
+                #point will result in p1 winning! 
+                if firstSubRes or secondSubRes:
+                    return True 
+                else:
+                    return False 
+            else:
+                firstSubRes = helper(i+1, j, cumOne, cumTwo + nums[i], True)
+                secondSubRes = helper(i, j-1, cumOne, cumTwo + nums[j], True)
+                if not firstSubRes or not secondSubRes:
+                    return False 
+                else:
+                    return True
+        N = len(nums)
+        #start recursion starting with P1 on first turn! 
+        return helper(0, N-1, 0, 0, True)  
+                 
+                
+
+        
