@@ -1,0 +1,11 @@
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        
+        @cache
+        def recurse(index, total):
+            if index == len(nums):
+                return 1 if total == 0 else 0
+            
+            return recurse(index + 1, total - nums[index]) + recurse(index + 1, total + nums[index])
+            
+        return recurse(0, target)
