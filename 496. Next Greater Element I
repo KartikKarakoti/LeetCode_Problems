@@ -1,0 +1,18 @@
+class Solution:
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        x = { }
+        N = len(nums2)
+        for i,e in enumerate(nums2):
+            x[e] = i
+
+        def help(er):
+            temp = nums2[er]
+            for i in range(er+1,N):
+                if nums2[i]>temp:
+                    return nums2[i]
+            return -1
+
+        for i in range(len(nums1)):
+            nums1[i]= help(x[nums1[i]])
+
+        return nums1
