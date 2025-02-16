@@ -1,0 +1,26 @@
+class Solution:
+    def findPoisonedDuration(self, timeSeries: List[int], duration: int) -> int:
+        # 1. create an array of intervals
+        intervals = []
+
+        for i in range(len(timeSeries)):
+            intervals.append([ timeSeries[i], timeSeries[i] + duration - 1 ])
+
+        # 2. merge intervals 
+        merged_intervals = [intervals[0]]
+
+        for i in range(1, len(intervals)):
+            curr = intervals[i]
+
+            if merged_intervals[-1][1] >= curr[0]:
+                merged_intervals[-1][1] = max(merged_intervals[-1][1], curr[1])
+            else:
+                merged_intervals.append(curr)
+
+        # 3. count duration
+        duration = 0         
+        
+        for interval in merged_intervals:
+            duration += interval[1] - interval[0] + 1
+        
+        return duration 
