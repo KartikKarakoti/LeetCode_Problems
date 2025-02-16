@@ -1,0 +1,54 @@
+class Solution:
+    def findMinStep(self, board: str, hand: str) -> int:
+        '''
+        5 colors of balls: R, Y, B, G, W
+        board is a ringle row
+        
+        place a ball from your hand in the board
+        if three or more consecutive balls of the same color, remove ball form board
+        
+        return minimum balls you have to intert to clear board or -1 if not possible
+        three or more consecutive balls 
+        
+        '''
+        hand = "".join(sorted(hand))
+        INF = 10 ** 10
+        
+        @cache
+        def reduce(curBoard):
+            if not curBoard:
+                return ""
+            
+            arr = [c for c in curBoard]
+                
+            for i in range(len(arr) - 2):
+                if arr[i] == arr[i + 1] == arr[i + 2]:
+                    j = i + 3
+                    while j < len(arr) and arr[j] == arr[i]:
+                        j += 1      
+
+                    return reduce(curBoard[:i] + curBoard[j:])
+
+                
+            return curBoard
+    
+        @cache
+        def fn(board, hand):
+            if not board: return 0
+            if not hand: return INF 
+            ans = INF 
+            for i in range(len(hand)): 
+                if i == 0 or hand[i-1] != hand[i]:
+                    newHand = hand[:i] + hand[i+1:]
+                    for j in range(0, len(board)): 
+                        if hand[i] == board[j] or (j != 0 and board[j-1] == board[j]): 
+                            
+                            newBoard = reduce(board[:j] + hand[i] + board[j:])
+                           
+                            ans = min(ans, 1 + fn(newBoard, newHand))
+            return ans 
+        
+        return (lambda x: x if x < INF else -1)(fn(board, hand))
+            
+        
+        
