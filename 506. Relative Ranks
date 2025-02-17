@@ -1,0 +1,15 @@
+class Solution:
+    def findRelativeRanks(self, score: List[int]) -> List[str]:
+        result = []
+        medals = {}
+        ranks = ["Gold Medal", "Silver Medal", "Bronze Medal"]
+        mscore = [-x for x in score]
+        heapq.heapify(mscore)
+        for i in range(min(3, len(score))):
+            medals[-1 * heapq.heappop(mscore)] = ranks[i]
+        if len(mscore) >= 2:
+            for i in range(3, len(score)):
+                medals[-1 * heapq.heappop(mscore)] = i + 1
+        for i in score:
+            result.append(str(medals[i]))
+        return result
