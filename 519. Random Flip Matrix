@@ -1,0 +1,24 @@
+class Solution:
+
+    def __init__(self, m: int, n: int):
+        self.ROW = m
+        self.COL = n
+        self.cac = set()
+
+    def flip(self) -> List[int]:
+        i = random.randint(0, self.ROW - 1)
+        j = random.randint(0, self.COL - 1)
+        while (i, j) in self.cac:
+            i = random.randint(0, self.ROW - 1)
+            j = random.randint(0, self.COL - 1)
+        self.cac.add((i, j))
+        return [i, j]
+
+    def reset(self) -> None:
+        self.cac.clear()
+
+
+# Your Solution object will be instantiated and called as such:
+# obj = Solution(m, n)
+# param_1 = obj.flip()
+# obj.reset()
