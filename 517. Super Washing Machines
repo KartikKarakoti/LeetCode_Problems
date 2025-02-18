@@ -1,0 +1,50 @@
+class Solution:
+    def findMinMoves(self, machines: List[int]) -> int:
+        '''
+        [4, 4, 0, 0] -> 4
+        [1, 5, 1, 1]
+        [2, 2, 2, 2]
+
+
+
+        
+        [4, 0, 4, 0] -> 2 
+        [1, 1, 5, 1]
+        [2, 2, 2, 2]
+
+
+        
+        '''
+        N = len(machines)
+
+        if sum(machines) % N:
+            return -1
+
+        goal = sum(machines) // N
+
+        
+        arr = [0] * (N)
+
+        for i, n in enumerate(machines):
+            arr[i] = n - goal
+
+        res = max(arr)
+        s = 0
+        for n in arr:
+            s += n
+            res = max(res, s)
+
+        s = 0
+        for n in arr[::-1]:
+            s += n
+            res = max(res, s)
+
+
+
+
+        return res
+
+
+
+        
+        
