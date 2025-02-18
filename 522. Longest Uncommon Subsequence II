@@ -1,0 +1,33 @@
+class Solution:
+    def findLUSlength(self, strs: List[str]) -> int:
+        def isSubsequence(str1,str2):
+            if len(str1)>len(str2):
+                return len(str1)
+            idx = 0
+            for i in range(0,len(str1)):
+                idx = str2.find(str1[i],idx)
+                if idx!=-1:
+                    idx+=1
+                else:
+                    return len(str1)
+                # if idx==-1:
+                #     return len(str1)
+            return -1
+        max_num = -1
+        for i in range(0,len(strs)):
+            min_len = float('-inf')
+            for j in range(0,len(strs)):
+                if i!=j:
+                    a = isSubsequence(strs[i],strs[j])
+                    if a==-1:
+                        min_len = float('-inf')
+                        break;
+                    else:
+                        min_len=max(min_len,a)
+                        # print(min_len)
+            if min_len!=float('-inf'):
+                max_num = max(max_num,min_len)
+        # print(isSubsequence('aabbcd','c'))
+        return max_num   
+
+
