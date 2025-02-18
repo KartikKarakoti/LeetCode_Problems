@@ -1,0 +1,9 @@
+class Solution:
+    def findLUSlength(self, a: str, b: str) -> int:
+        if a==b:
+            return -1
+        l=[a[i:] for i in range(len(a))] #We make a list containing all the substrings of given string a and then compare
+        for i in l:
+            if i!=b:
+                return len(i) if len(i)>len(b) else len(b)
+        
