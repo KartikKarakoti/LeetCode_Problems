@@ -1,0 +1,21 @@
+class Solution:
+    def findLongestWord(self, s: str, dictionary: List[str]) -> str:
+        # Sort the dictionary first by the longest word, and then alphabetically for same-length words
+        dictionary.sort(key=lambda x: (-len(x), x))
+        
+        # Iterate over each word in the sorted dictionary
+        for word in dictionary:
+            i = 0  
+            for char in s:
+                
+                if i < len(word) and char == word[i]:
+                    i += 1
+                # If the entire word has been matched, break the loop early
+                if i == len(word):
+                    break
+            # If the word is matched completely, return it as the result
+            if i == len(word):
+                return word
+        
+        # Return an empty string if no word from the dictionary is found in 's'
+        return ""
