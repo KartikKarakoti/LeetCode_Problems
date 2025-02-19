@@ -1,0 +1,13 @@
+
+class Solution:
+    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
+
+        def walk(root):
+            if root:
+                yield from walk(root.right)
+                yield root.val
+                yield from walk(root.left)
+
+        return min(starmap(operator.sub, pairwise(walk(root))))
+
+                
