@@ -1,0 +1,9 @@
+class Solution:
+    def complexNumberMultiply(self, num1: str, num2: str) -> str:
+        real1,img1 = num1.split('+')
+        real2,img2 = num2.split('+')
+        realMul = int(real1)*int(real2)
+        imgMul = int(img1[:len(img1)-1])*int(img2[:len(img2)-1])*(-1)
+        crossMul1 = int(real1)*int(img2[:len(img2)-1])
+        crossMul2 = int(real2)*int(img1[:len(img1)-1])
+        return str(realMul+imgMul)+'+'+str(crossMul1+crossMul2)+"i"
