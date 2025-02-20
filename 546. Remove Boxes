@@ -1,0 +1,110 @@
+class Solution:
+    def removeBoxes(self, boxes: List[int] ) -> int:
+        """
+            this question is hard
+            but let's think about it
+            for naive way
+            [1, 1, 3, 3, 3, 2, 2, 1]
+            you might think, we group by the maximum we can
+            so 
+            (1, 1), (3, 3, 3), (2, 2), (1)
+            2^2 + 3^2 + 2^2 + 1^2
+            but this is not the correct answer
+            we could try to implement:
+
+            def removeBoxes(self, boxes: List[int] ) -> int:
+                def dp(l, r):
+                    count = 0
+                    if l > r:
+                        return 0
+                    while(l + 1 <= r and boxes[l] == boxes[l+1]):
+                        l+=1
+                        count+=1
+                    ans = (count+1)**2 + dp(l+1, r)
+                    return ans
+            return dp(0, len(boxes)-1)
+
+            this solution actually work when sequence look like this
+            [1,3,2,2,2,4,4,4], for example, no 3 after indice 2
+
+            However, this solution is not good enough
+
+            we need to **jump** to some indice if that element is the same as we are right now
+
+
+
+            def removeBoxes(self, boxes: List[int] ) -> int:
+
+                def dp(l, r, count=0):
+                    if l > r:
+                        return 0
+                    while(l + 1 <= r and boxes[l] == boxes[l+1]):
+                        l+=1
+                        count+=1
+                    ans = (count+1)**2 + dp(l+1, r)
+
+                    for m in range(l+1, r+1):
+                        if boxes[m] == boxes[l]:
+                            # we jump
+                            ans = max(ans, dp(m, r, count+1) + dp(l+1, r-1, 0))
+
+                return dp(0, len(boxes)-1)
+
+
+            this video have picture for better visualization
+            https://www.youtube.com/watch?v=_8hSyaxVRZ8
+        """  
+        @lru_cache(None)          
+        def dp(l, r, count=0):
+            if l > r:
+                return 0
+            while(l + 1 <= r and boxes[l] == boxes[l+1]):
+                l+=1
+                count+=1
+            ans = (count+1)**2 + dp(l+1, r)
+
+            for m in range(l+1, r+1):
+                if boxes[m] == boxes[l]:
+                    # we jump
+                    ans = max(ans, dp(m, r, count+1) + dp(l+1, m-1, 0))
+            return ans
+
+        return dp(0, len(boxes)-1)
+
+
+        """
+        from functools import lru_cache
+
+class Solution:
+    def removeBoxes(self, boxes):
+        # Call the cached function
+        return self.calculatePoints(tuple(boxes), 0, len(boxes) - 1, 0)
+    
+    @lru_cache(None)
+    def calculatePoints(self, boxes, l, r, k):
+        # Base case: If there are no boxes to remove
+        if l > r:
+            return 0
+        
+        # Increase the count of consecutive boxes of the same color at the end of the range
+        while r > l and boxes[r] == boxes[r - 1]:
+            r -= 1
+            k += 1
+        
+        # Option 1: Remove all boxes of the same color ending at r
+        result = self.calculatePoints(boxes, l, r - 1, 0) + (k + 1) ** 2
+        
+        # Option 2: Try merging boxes with the same color within the range
+        for i in range(l, r):
+            if boxes[i] == boxes[r]:
+                result = max(
+                    result,
+                    self.calculatePoints(boxes, l, i, k + 1) + self.calculatePoints(boxes, i + 1, r - 1, 0)
+                )
+        
+        return result
+
+        
+        This solution adapt from the eitorial
+        basically is the same, but work backward
+        """
