@@ -1,0 +1,22 @@
+class Solution:
+    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
+        que = deque()
+        directions = [(0, 1), (1, 0), (-1, 0), (0, -1)]
+
+        for i in range(len(mat)):
+            for j in range(len(mat[0])):
+                if mat[i][j] == 0:
+                    que.append((i, j))
+                else:
+                    mat[i][j] = float('inf')
+
+        while que:
+            x, y = que.popleft()
+            for dx, dy in directions:
+                new_x, new_y = x + dx, y + dy
+                if 0 <= new_x < len(mat) and 0 <= new_y < len(mat[0]):
+                    if mat[new_x][new_y] > mat[x][y] + 1:
+                        mat[new_x][new_y] = mat[x][y] + 1
+                        que.append((new_x, new_y))
+
+        return mat
