@@ -1,0 +1,12 @@
+class Solution:
+    def checkRecord(self, s: str):
+        counter = 0
+        for char in s:
+            if char == 'A':
+                counter += 1
+        
+        if 'LLL' in s or counter >= 2:
+            return False
+        
+        else:
+            return True
