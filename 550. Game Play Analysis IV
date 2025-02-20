@@ -1,0 +1,5 @@
+ SELECT  ROUND( COUNT(distinct TAB.player_id)/ (SELECT COUNT(distinct player_id) FROM Activity),2) fraction
+ FROM
+    (SELECT *, row_number() over(partition by player_id  order by event_date) rn FROM Activity )  TAB
+ JOIN Activity ON Activity.player_id = TAB.player_id AND DATEDIFF(Activity.event_date, TAB.event_date  ) = 1
+ WHERE rn = 1
