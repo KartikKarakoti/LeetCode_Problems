@@ -1,0 +1,33 @@
+class Solution:
+    def __init__(self):
+        self.final_path = ""
+        self.maxi = 0
+
+    def optimalDivision(self, nums: List[int]) -> str:
+        dp = {}
+        def recursion(o,c,index,path,nums):
+            if index == len(nums) and o == c:
+                # evaluate path
+                if eval(path) > self.maxi:
+                    self.final_path = path
+                    self.maxi = eval(path)
+                return eval(path)
+            elif c > o or index >= len(nums):
+                return -float('inf')
+            else:
+                if path in dp:
+                    return dp[path]
+                    
+                # add a open bracket
+                add_open = recursion(o+1,c,index+1,path+"/"+"("+str(nums[index]),nums)
+                # donot add a bracket
+                nothing = recursion(o,c,index+1,path+"/" + str(nums[index]),nums)
+                # add a closed bracket
+                closed = recursion(o,c+1,index+1,path+"/"+str(nums[index])+")",nums)
+                
+                dp[path] = max(add_open,nothing,closed)
+                return dp[path]
+
+        recursion(0,0,1,f"{nums[0]}",nums)
+
+        return self.final_path
