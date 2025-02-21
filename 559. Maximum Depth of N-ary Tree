@@ -1,0 +1,15 @@
+class Solution:
+    def maxDepth(self, root: 'Node') -> int:
+        if not root:
+            return 0
+        
+        nodes = deque()
+        nodes.append((root, 1))
+        maxx = 0
+        while nodes:
+            cur, val = nodes.popleft()
+            maxx = val
+            if cur.children:
+                for child in cur.children:
+                    nodes.append((child, val+1))
+        return maxx
