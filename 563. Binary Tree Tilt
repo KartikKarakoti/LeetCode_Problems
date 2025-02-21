@@ -1,0 +1,15 @@
+class Solution:
+    def findTilt(self, root: Optional[TreeNode]) -> int:
+        def rec(node):
+            nonlocal res
+            if not node:
+                return 0
+            left_sum = rec(node.left)
+            right_sum = rec(node.right)
+            res += abs(left_sum - right_sum)
+            
+            return left_sum + node.val + right_sum
+        
+        res = 0
+        rec(root)
+        return res
