@@ -1,0 +1,29 @@
+class Solution:
+    def nextGreaterElement(self, n: int) -> int:
+        digits = list(map(int, str(n)))
+        stack, L = [], len(digits)
+        for i in reversed(range(L)):
+            # because need to find smallest highest than n, need to work from the end
+            # do, while not be found any number less than exists in the stack
+            # stack is mono increasing, so on the top is always max number (compare with top)
+            # for n = 230[2]41 the smallest highest value is 23041[2]
+            # we need to find 2 on this step, 2 < 4 (top of the stack), stack = [1, 4]
+            if not stack or digits[stack[-1]] <= digits[i]:
+                stack.append(i)
+                continue
+
+            # find in the stack the index of the lowest biggest value than current digit, for 2 it's 4
+            # stack is sorted in asc order => can be used binary search
+            # notice, than in stack indexes, not values, so use lambda to compare values
+            swapIndex = stack[bisect_right(stack, digits[i], key = lambda x: digits[x])]
+            # after swap 2 with 4 we have [2, 3, 0, 4, [2], 1]
+            digits[i], digits[swapIndex] = digits[swapIndex], digits[i]
+            # sort all values after i index, in our case it's subarray [2, 1]
+            # [2, 3, 0, 4, 1, 2] after sorting, but often part after index i will be already sorted
+            digits[i+1:L] = sorted(digits[i+1:L])
+            break
+        # instead of comparison lenghts you can use flag and change it for True in else block
+        # also check that final number less than 2**31, for example 2147483486 should return -1
+        nextN = int(''.join(map(str, digits)))
+        
+        return nextN if len(stack) < len(digits) and nextN < 2**31 else -1
