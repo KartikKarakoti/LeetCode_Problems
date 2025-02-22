@@ -1,0 +1,9 @@
+/* Write your T-SQL query statement below */
+Select name
+From Employee
+Where id in (
+    Select managerid
+    From Employee
+    Group By managerId
+    Having count(1)>=5
+)
