@@ -1,0 +1,22 @@
+class Solution:
+    def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+        cache = {}
+        def dfs(i,j,mv):
+            if (i,j, mv) in cache:
+                return cache[i,j,mv]
+
+            if i>=m or j>=n or i<0 or j<0:
+                return 1
+            elif mv<=0:
+                return 0
+
+            d = [(1,0),(-1,0),(0,-1),(0,1)]
+            c = 0
+            for x,y in d:
+                nx, ny = i+x, j+y
+                c += dfs(nx,ny,mv-1)
+                c %= 10**9+7
+            cache[(i,j,mv)] = c
+            return c
+        return dfs(startRow,startColumn,maxMove)
+
