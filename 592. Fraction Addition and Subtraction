@@ -1,0 +1,10 @@
+from fractions import Fraction
+class Solution:
+    def fractionAddition(self, e: str) -> str:
+        e=e.replace('-','+-')
+        a=e.split('+')
+        a=[i for i in a if i]
+        result = Fraction(0, 1)
+        for i in a:
+            result += Fraction(i)
+        return f"{result.numerator}/{result.denominator}"     
