@@ -1,0 +1,17 @@
+class Solution:
+    def judgeSquareSum(self, c: int) -> bool:
+        nums = [i * i for i in range(int(sqrt(c) + 1))]
+
+        left = 0
+        right = len(nums) - 1
+
+        while left <= right:
+            sqrSum = nums[left] + nums[right]
+
+            if sqrSum == c:
+                return True
+            if sqrSum > c:
+                right -= 1
+            else:
+                left += 1
+        return False
