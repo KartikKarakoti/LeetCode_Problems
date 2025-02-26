@@ -1,0 +1,15 @@
+class Solution:
+    def scheduleCourse(self, courses: List[List[int]]) -> int:
+        if not len(courses): return 0
+
+        courses.sort(key=lambda x: x[1])
+
+        total_duration, mx_heap = 0, []
+        for duration, deadline in courses:
+            total_duration += duration
+            heapq.heappush(mx_heap, -1*duration)
+            if total_duration > deadline:
+                dropping_duration = -1 * heapq.heappop(mx_heap)
+                total_duration -= dropping_duration
+        
+        return len(mx_heap)
