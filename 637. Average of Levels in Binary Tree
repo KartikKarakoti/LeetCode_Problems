@@ -1,0 +1,32 @@
+from collections import deque
+from collections import defaultdict
+
+class Solution:
+    def averageOfLevels(self, root: Optional[TreeNode]) -> List[float]:
+
+        def bfs(root, ans):
+            if not root:
+                return
+
+            visit = set()
+            queue = deque([(root,0)])
+            prev_level = 0
+
+            while queue:
+                n, level = queue.popleft()
+                d[level].append(n.val)
+                visit.add(n)
+
+                if n.left:
+                    queue.append((n.left, level + 1 ))
+
+                if n.right:
+                    queue.append((n.right, level + 1))
+
+        d = defaultdict(list)
+        bfs(root, d)
+        ans = []
+        for k,v in d.items():
+            ans.append(sum(d[k])/len(d[k]))
+        return ans
+            
