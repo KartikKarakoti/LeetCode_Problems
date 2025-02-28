@@ -1,0 +1,28 @@
+class Solution:
+  def findDuplicateSubtrees(self, root: TreeNode) -> List[TreeNode]:
+    # Step 1: Create a dictionary to store the frequency of each subtree
+    freq = {}
+    res = []
+    # Step 2: Define a function called "traverse" to get the string representation of a subtree
+    def traverse(node):
+        # If node is None, return an empty string
+        if not node:
+            return ""
+        # Get the string representation of left and right subtrees recursively
+        left = traverse(node.left)
+        right = traverse(node.right)
+        # Combine the string representations to form the string representation of the current subtree
+        subtree = left + "," + right + "," + str(node.val)
+        # Update the frequency of the current subtree in the dictionary
+        freq[subtree] = freq.get(subtree, 0) + 1
+        # If the frequency of the current subtree is 2, add it to the result list
+        if freq[subtree] == 2:
+            res.append(node)
+        # Return the string representation of the current subtree
+        return subtree
+    
+    # Step 3: Traverse the tree recursively and update the frequency of each subtree in the dictionary
+    traverse(root)
+    
+    # Step 4: Return the list of subtrees which have a frequency greater than 1
+    return res
