@@ -1,0 +1,22 @@
+class Solution:
+    def isPossible(self, nums: List[int]) -> bool:
+        d={}            # to find the frequency of each element
+        for e in nums:
+            d[e] = d.get(e, 0)+1
+        dt={}           # to keep track of num to be added
+        for num in nums:
+            if d.get(num, 0) == 0:                      # if the number is not present
+                continue
+            elif dt.get(num, 0) > 0:                    # if num can be appended into any existing sequence
+                dt[num] -= 1                            # as number is added, so not able to add in that sequence again
+                dt[num+1] = dt.get(num+1, 0)+1          # now num+1 can be appended to the sequence
+                
+            elif d.get(num+1, 0) > 0 and d.get(num+2, 0) > 0:     # if number is not appendable then checking it to create new sequence
+                d[num+1]-=1                             # if new sequence is possible then remove on occurance of num
+                d[num+2]-=1                             
+                dt[num+3] = dt.get(num+3, 0)+1          # expected next num for new sequence
+            else:
+                return False
+            d[num]-=1                                   # as it is visited so we are removing one occurance
+        return True
+            
