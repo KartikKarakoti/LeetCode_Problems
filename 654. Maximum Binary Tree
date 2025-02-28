@@ -1,0 +1,9 @@
+class Solution:
+    def constructMaximumBinaryTree(self, nums: List[int]) -> Optional[TreeNode]:
+        if not nums: return
+        val = max(nums)
+        idx = nums.index(val)
+        node = TreeNode(val)
+        node.left = self.constructMaximumBinaryTree(nums[0:idx])
+        node.right = self.constructMaximumBinaryTree(nums[idx + 1:])
+        return node
