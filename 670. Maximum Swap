@@ -1,0 +1,14 @@
+class Solution:
+    def maximumSwap(self, num: int) -> int:
+        digits = list(str(num))
+        last = {int(d): i for i, d in enumerate(digits)}
+        
+        for i, d in enumerate(digits):
+            # Check for digits larger than the current one
+            for larger_digit in range(9, int(d), -1):
+                if larger_digit in last and last[larger_digit] > i:
+                    # Perform the swap
+                    digits[i], digits[last[larger_digit]] = digits[last[larger_digit]], digits[i]
+                    return int(''.join(digits))
+        
+        return num
