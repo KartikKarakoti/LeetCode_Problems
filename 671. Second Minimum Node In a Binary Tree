@@ -1,0 +1,11 @@
+class Solution:
+    def findSecondMinimumValue(self, root: Optional[TreeNode]) -> int:
+        if not root: return -1
+        ar=set()
+        def dfs(root):
+            ar.add(root.val)
+            if root.left: dfs(root.left)
+            if root.right: dfs(root.right)
+        dfs(root)
+        ar.remove(min(ar))
+        return min(ar) if ar else -1
