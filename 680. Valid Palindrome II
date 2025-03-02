@@ -1,0 +1,44 @@
+class Solution:
+    # Helper function to check if a substring is a palindrome
+    def checkPalindrome(self, s: str, l: int, r: int) -> bool:
+        """
+        Check if the substring of s from index l to r (inclusive) is a palindrome.
+        
+        Parameters:
+        - s: The input string.
+        - l: The starting index of the substring.
+        - r: The ending index of the substring.
+        
+        Returns:
+        - True if the substring is a palindrome.
+        - False otherwise.
+        """
+        # Iterate while the left index is less than the right index
+        while l < r:
+            # If characters at the left and right indices do not match, it's not a palindrome
+            if s[l] != s[r]:
+                return False
+            # Move the left index to the right and the right index to the left
+            l += 1
+            r -= 1
+        # If we finish the loop without finding a mismatch, it is a palindrome
+        return True
+
+    # Main function to check if a string can be a valid palindrome
+    def validPalindrome(self, s: str) -> bool:
+        # Initialize pointers for the start and end of the string
+        l, r = 0, len(s) - 1
+        
+        # Iterate while the left pointer is less than the right pointer
+        while l < r:
+            # If characters at the left and right pointers do not match
+            if s[l] != s[r]:
+                # Check if the substring without the left character or without the right character is a palindrome
+                return (self.checkPalindrome(s, l + 1, r) or 
+                        self.checkPalindrome(s, l, r - 1))
+            # Move both pointers towards the center
+            l += 1
+            r -= 1
+        
+        # If no mismatches were found, the string is already a palindrome
+        return True
