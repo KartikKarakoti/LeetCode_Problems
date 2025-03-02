@@ -1,0 +1,25 @@
+class Solution:
+    def findLengthOfLCIS(self, nums: List[int]) -> int:
+        # deal with edge case
+        if len(nums) == 1:
+            return 1
+
+        # specify variables - we only need one pointer 
+        # as we will have to check one by one anyway so we can use 
+        # pointer and pointer + 1 to achieve this
+        idx, curr, longest = 0, 1, 1
+        # since we will use pointer + 1, we only traverse the first n - 1 elements
+        while idx < len(nums) - 1:
+            # if strictly increasing, update the current counter
+            # and immediately compare with the current max and update
+            if nums[idx + 1] > nums[idx]:
+                curr += 1
+                longest = max(longest, curr)
+            # if not strictly increasing then reset the counter
+            else:
+                curr = 1
+            # and only now do we update the counter as it applies to both if and else
+            idx += 1
+        
+        return longest
+        
