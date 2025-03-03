@@ -1,0 +1,20 @@
+class Solution:
+    def hasAlternatingBits(self, n: int) -> bool:
+        binary = bin(n)[2:]
+        even = set(binary[i] for i in range(len(binary)) if i % 2 == 0)
+        odd = set(binary[i] for i in range(len(binary)) if i % 2 != 0)
+        if len(even) > 1 or len(odd) > 1 or even == odd:
+            return False
+        return True
+
+
+    def hasAlternatingBits(self, n: int) -> bool:
+        binary = bin(n)[2:]
+        start = binary[0]
+        for i in range(1, len(binary)):
+            if binary[i] != start:
+                start = binary[i]
+                continue
+            else:
+                return False
+        return True
