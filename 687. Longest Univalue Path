@@ -1,0 +1,22 @@
+class Solution:
+    def longestUnivaluePath(self, root: Optional[TreeNode]) -> int:
+        A=[1]
+        def b(n):
+            if n.left is None and n.right is None: return 1
+            crosslen = 1
+            singret = 1
+            if n.left is not None :
+                leftres = b(n.left)
+                if n.left.val==n.val:
+                    singret+=leftres
+                    crosslen += leftres
+            if n.right is not None:
+                rres = b(n.right)
+                if n.right.val==n.val:
+                    singret=max(singret,rres+1)
+                    crosslen += rres
+            if crosslen>A[0]:A[0]=crosslen
+            return singret
+        if root is None:return 0
+        b(root)
+        return A[0]-1
