@@ -1,0 +1,18 @@
+class Solution:
+    def minStickers(self, stickers: List[str], target: str) -> int:
+
+        stickers = [Counter(s) for s in stickers if set(s)&set(target)]
+        def generate(target):
+            if not target: return 0
+            
+            target_counter = Counter(target)
+            res = float("inf")
+            for sticker in stickers:
+                if sticker[target[0]] == 0: continue
+                tmp = 1 + generate("".join([letter*count for letter,count in (target_counter-sticker).items()]))
+
+                res = min(res,tmp)
+            return res
+
+        res = generate(target)
+        return -1 if res == float("inf") else res
