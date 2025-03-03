@@ -1,0 +1,70 @@
+class Solution:
+    def findRedundantDirectedConnection(self, edges: List[List[int]]) -> List[int]:
+
+        # Here is the idea:
+        # Case I: A node has two parents. We will identify two edges (twoParents1 and twoParents2) that lead to the same child.
+        # Case II: There is a cycle.
+        #
+        # If Case I is false and only Case II is true, the problem is similar to this problem: https://leetcode.com/problems/redundant-connection/
+        #
+        # If Case I is true, regardless of whether Case II is true/false, the solution will be either twoParents1 or twoParents2.
+        # This is because the problem statement says "one additional directed edge added."
+        # In that case, we will run union-find for all the edges except twoParents1 and twoParents2.
+        # Once all the edges (except twoParents1 and twoParents2) are processed, we check which one (twoParents1 or twoParents2) creates a cycle.
+
+        N = len(edges)
+        parent = [i for i in range(N)]
+
+        def find(a):
+            if parent[a] == a:
+                return a
+            else:
+                parent[a] = find(parent[a])
+                return parent[a]
+        
+        def union(a,b):
+            p1, p2 = find(a), find(b)
+            if p1 == p2:
+                return False
+            else:
+                parent[p2] = p1
+                return True
+        
+        # Case I: A node has two parents
+        indegree = [0] * N
+        twoParents1 = None
+        twoParents2 = None
+        caseI = False # flag variable indicating whether caseI is true
+        for u, v in edges:
+            if indegree[v-1] == 1:
+                twoParents2 = [u, v]
+                caseI = True
+            else:
+                indegree[v-1] = 1
+
+        if twoParents2:
+            for u, v in edges:
+                if twoParents2[1] == v:
+                    twoParents1 = [u, v]
+                    break
+
+        # At this time, we have two edges twoParents1 and twoParents2 that indicate two parents of the same node, which is not allowed
+        if caseI == False: # No node with two parents
+            for u, v in edges:
+                if union(u-1,v-1) == False:
+                    return [u,v]
+        else:
+            caseII = False # caseII is true if there is a cycle
+            for u, v in edges:
+                if twoParents1 == [u,v] or twoParents2 == [u,v]:
+                # We are excluding the two-parent edges since that will mess up the parent[] array. We will deal with that later.
+                    continue
+                else:
+                    union(u-1,v-1)
+            
+            # Check if twoParents1 makes a cycle. If yes, return twoParents1. Otherwise, return twoParents2.
+            if union( twoParents1[0]-1, twoParents1[1]-1 ) == False:
+                return twoParents1
+            else:
+                return twoParents2
+            
