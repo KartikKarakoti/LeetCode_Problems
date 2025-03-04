@@ -1,0 +1,20 @@
+from collections import defaultdict
+
+class Solution:
+    def countBinarySubstrings(self, s: str) -> int:
+        count = 0
+        occur = defaultdict(int)
+        prev_char = s[0]
+
+        for char in s:
+            if char != prev_char:
+                count += min(occur["0"], occur["1"])
+                occur[char] = 1
+            
+            else:
+                occur[char] = occur[char] + 1
+
+            prev_char = char
+        
+        count += min(occur["0"], occur["1"])
+        return count
