@@ -1,0 +1,24 @@
+class Solution:
+    def findLength(self, nums1: List[int], nums2: List[int]) -> int:
+        res = 0
+        # left to right sliding 
+        for k in range(len(nums1)):
+            s = 0 
+            for (x1,x2) in zip(nums1[k:],nums2):
+                if x1==x2:
+                    s += 1 
+                else:
+                    res = max(res,s)
+                    s = 0 
+            res = max(res,s)
+        # right to left sliding 
+        for k in range(len(nums2)):
+            s = 0 
+            for (x1,x2) in zip(nums2[k:],nums1):
+                if x1==x2:
+                    s += 1 
+                else:
+                    res = max(res,s)
+                    s = 0 
+            res = max(res,s)
+        return res 
