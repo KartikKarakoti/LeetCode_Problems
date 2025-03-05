@@ -1,0 +1,23 @@
+"""
+Complexity Analysis:
+    - Time Complexity: O(n)
+    - Space Complexity: O(1)
+"""
+
+class SlidingWindow:
+    def count_subarrays_less_than_k(self, nums, k):
+        n = len(nums)
+        left = 0
+        current_product = 1
+        count = 0
+        for right in range(n):
+            current_product *= nums[right]
+            while current_product >= k and left <= right:
+                current_product //= nums[left]
+                left += 1
+            count += (right - left + 1)
+        return count
+            
+class Solution:
+    def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
+        return SlidingWindow().count_subarrays_less_than_k(nums, k)
