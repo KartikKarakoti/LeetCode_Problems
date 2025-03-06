@@ -1,0 +1,45 @@
+class Solution:
+    def countOfAtoms(self, formula: str) -> str:
+        # Use collections.Counter instead of TreeMap
+        from collections import Counter
+        
+        # Function to parse a number from the formula
+        def parse_number(i):
+            if i >= len(formula) or not formula[i].isdigit():
+                return i, 1
+            num = 0
+            while i < len(formula) and formula[i].isdigit():
+                num = num * 10 + int(formula[i])
+                i += 1
+            return i, num
+
+        # Main parsing function
+        def parse():
+            nonlocal i
+            atom_count = Counter()
+            while i < len(formula):
+                if formula[i] == '(':
+                    i += 1
+                    inner_count = parse()
+                    i, num = parse_number(i)
+                    for atom, count in inner_count.items():
+                        atom_count[atom] += count * num
+                elif formula[i] == ')':
+                    i += 1
+                    return atom_count
+                else:
+                    # Parse atom name
+                    j = i + 1
+                    while j < len(formula) and formula[j].islower():
+                        j += 1
+                    atom = formula[i:j]
+                    i, num = parse_number(j)
+                    atom_count[atom] += num
+            return atom_count
+
+        i = 0
+        atom_count = parse()
+
+        # Build the result string
+        return ''.join(atom + (str(count) if count > 1 else '')
+                       for atom, count in sorted(atom_count.items()))
