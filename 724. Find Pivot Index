@@ -1,0 +1,19 @@
+"""
+Thoughts:
+- Nums is non-empty
+
+Approaches:
+1) We could find the leftSums and rightSums of nums but then we'd have several possible indexing issues(does it exist in the correct array, index offsets, etc.)
+2) We could setup leftSum = 0 and rightSum = sum(nums) and then as we iterate leftSum += element and rightSum -= element and we can perform a comparison check to return the idx if valid.
+"""
+class Solution:
+    def pivotIndex(self, nums: List[int]) -> int:
+        leftSum, rightSum = 0, sum(nums)
+
+        for i, num in enumerate(nums):
+            rightSum -= num
+            if leftSum == rightSum:
+                return i
+            leftSum += num
+        
+        return -1
