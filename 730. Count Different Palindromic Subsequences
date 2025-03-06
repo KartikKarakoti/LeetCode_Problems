@@ -1,0 +1,27 @@
+class Solution:
+    def countPalindromicSubsequences(self, s: str) -> int:
+        n = len(s)
+        mod = 10**9 + 7
+        @cache
+        def dfs(i, j):
+            if j < i:
+                return 0
+            if i == j:
+                return 1
+            if s[i] == s[j]:
+                l, r = i+1, j-1
+                while l <= r and s[l] != s[i]: l += 1
+                while l <= r and s[r] != s[j]: r -= 1
+                if l > r:
+                    # no char same as s[i]
+                    return (2* dfs(i+1, j-1) + 2) % mod
+                elif l == r:
+                    # 1 char same as s[i]
+                    return (2* dfs(i+1, j-1) + 1) % mod
+                else:
+                    # 2 or more chars same as s[i]
+                    return (2* dfs(i+1, j-1) - dfs(l+1, r-1)) % mod
+            # s[i] != s[j]
+            return (dfs(i, j-1) + dfs(i+1,j) - dfs(i+1, j-1)) % mod
+        
+        return dfs(0, n - 1) % mod
