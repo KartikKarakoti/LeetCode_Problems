@@ -1,0 +1,9 @@
+class Solution:
+    def monotoneIncreasingDigits(self, N: int) -> int:
+        nums = [int(x) for x in str(N)] # digits 
+        stack = []
+        for i, x in enumerate(nums): 
+            while stack and stack[-1] > x: x = stack.pop() - 1
+            stack.append(x) 
+            if len(stack) <= i: break 
+        return int("".join(map(str, stack)).ljust(len(nums), "9")) # right padding with "9"
