@@ -1,0 +1,65 @@
+class Solution:
+    def cherryPickup(self, grid: List[List[int]]) -> int:
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        n = len(grid)
+        
+        def get_valid_next_nodes(x, y):
+            # get the non-blocking nodes 1-move right/down to (x,y), within the boundary.
+            node_list = []
+            if x + 1 < n and grid[x+1][y] != -1:
+                node_list.append((x+1, y))
+            if y + 1 < n and grid[x][y+1] != -1:
+                node_list.append((x, y+1))
+            return node_list
+        
+        """
+        Thinking:
+        grow two paths in the same pace from (0,0) to (n-1, n-1),  moving only right/down. 
+        Let (x1, y1), (x2, y2) be the path pointers and (x1,y1,x2,y2) be the DP state.
+        Trace all reachable states after k steps. 
+        Trace the max value to reach state (x1,y1,x2,y2).
+        If two paths overlaps, they must meet at the same step.
+        So I know not to double count cherries. 
+        Return the max value after reaching (n-1, n-1, n-1, n-1) or 0 if reachable states becomes empty
+        """
+
+        def get_valid_next_states(s: tuple):
+            x1, y1, x2, y2 = s
+            node_list1 = get_valid_next_nodes(x1, y1)
+            node_list2 = get_valid_next_nodes(x2, y2)
+            return [ 
+                (next_x1, next_y1, next_x2, next_y2) 
+                for next_x1, next_y1 in node_list1
+                for next_x2, next_y2 in node_list2
+                ]
+
+        def get_state_immediate_value(s: tuple):
+            x1, y1, x2, y2 = s
+            if x1 == x2 and y1 == y2:
+                return grid[x1][y1]
+            
+            return grid[x1][y1] + grid[x2][y2]
+
+        current_state_value = {(0,0,0,0): grid[0][0]}
+        
+        for k in range(2*(n-1)):
+            if not current_state_value:
+                # no valid path toward (n-1, n-1, n-1, n-1)
+                return 0
+
+            next_state_value = {}
+            for s in current_state_value.keys():
+                for next_s in get_valid_next_states(s):
+                    possible_value = current_state_value[s] + get_state_immediate_value(next_s)
+                    if next_s in next_state_value.keys():
+                        next_state_value[next_s] = max(next_state_value[next_s], possible_value)
+                    else:
+                        next_state_value[next_s] = possible_value
+            
+            current_state_value = next_state_value
+        
+        return current_state_value[(n-1, n-1, n-1, n-1)]
+
