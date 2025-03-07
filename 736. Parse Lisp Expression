@@ -1,0 +1,55 @@
+class Solution:
+    def evaluate(self, expression):
+        tokens, stack, dict1 = [""], [], defaultdict(int)
+
+        def evaluate(tokens):
+            if tokens[0] in ["add","mult"]:
+                n1 = int(dict1[tokens[1]]) if tokens[1] in dict1 else int(tokens[1])
+                n2 = int(dict1[tokens[2]]) if tokens[2] in dict1 else int(tokens[2])
+                return str(n1+n2) if tokens[0] == "add" else str(n1*n2)
+            else:
+                for i in range(1,len(tokens)-2,2):
+                    dict1[tokens[i]] = dict1.get(tokens[i+1],tokens[i+1])
+                return dict1[tokens[-1]] if tokens[-1] in dict1 else tokens[-1]
+
+        for c in expression:
+            if c == "(":
+                if tokens[0] == "let": evaluate(tokens)
+                stack.append((tokens,dict(dict1)))
+                tokens = [""]
+            elif c == ")":
+                val = evaluate(tokens)
+                tokens, dict1 = stack.pop()
+                tokens[-1] += val
+            elif c == " ":
+                tokens.append("")
+            else:
+                tokens[-1] += c
+
+        return int(tokens[0])
+
+
+
+
+            
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+        
+        
+        
+        
+        
