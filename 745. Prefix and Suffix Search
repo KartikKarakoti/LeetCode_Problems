@@ -1,0 +1,50 @@
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.idx = -1
+
+class Trie:
+    def __init__(self):
+        self.dict1 = TrieNode()
+
+    def insert(self,word,index):
+        dict2 = self.dict1 
+
+        for i in word:
+            if i not in dict2.children:
+                dict2.children[i] = TrieNode()
+
+            dict2.idx = index 
+            dict2 = dict2.children[i]
+
+        dict2.idx = index
+
+class WordFilter:
+    def __init__(self, words):
+        self.T = Trie()
+
+        for i,word in enumerate(words):
+            reverse, temp = word[::-1], ""
+            for r in reverse:
+                temp += r 
+                self.T.insert(temp+"{"+word,i)
+
+    def f(self, pref, suff):
+        head = self.T.dict1
+
+        for i in suff[::-1]:
+            if i not in head.children:
+                return -1 
+            head = head.children[i]
+
+        if "{" in head.children:
+            head = head.children["{"]
+        else:
+            return -1 
+
+        for i in pref:
+            if i not in head.children:
+                return -1 
+            head = head.children[i] 
+
+        return head.idx 
