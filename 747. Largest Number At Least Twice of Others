@@ -1,0 +1,10 @@
+class Solution:
+    def dominantIndex(self, nums: List[int]) -> int:
+        maxe = max(nums)
+        index = nums.index(maxe)
+        nums.remove(maxe)
+        max2 = max(nums)
+        if maxe>=2*max2:
+            return index
+        return -1
+        
