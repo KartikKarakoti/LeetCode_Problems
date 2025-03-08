@@ -1,0 +1,30 @@
+class Solution:
+    def pyramidTransition(self, bottom: str, allowed: List[str]) -> bool:
+        n = len(bottom)
+        mat = [[('X', -1) for _ in range(n-1-i)] for i in range(n-1)]
+        stack = [(row, l-row) for l in range(n-1) for row in range(l+1)]
+        mapping = {}
+        for a in allowed:
+            if a[:2] not in mapping:
+                mapping[a[:2]] = [a[2]]
+            else:
+                mapping[a[:2]].append(a[2])
+        pos = 0
+        def find_parents(row, col):
+            if row == 0:
+                return bottom[col:col+2]
+            return mat[row-1][col][0] + mat[row-1][col+1][0]
+
+        while pos >= 0 and pos < len(stack):
+            row, col = stack[pos]
+            me, idx = mat[row][col]
+            parents = find_parents(row, col)
+            options = mapping.get(parents, [])
+            if idx+1 < len(options):
+                idx += 1
+                me = options[idx]
+                mat[row][col] = (me, idx)
+                pos += 1
+            else:
+                pos -= 1
+        return pos >= len(stack)
