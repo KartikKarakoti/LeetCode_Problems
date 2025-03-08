@@ -1,0 +1,22 @@
+class Solution:
+    def reachNumber(self, target: int) -> int:
+        # Step 1: Simplify the problem by considering the absolute value of target
+        target = abs(target)
+        
+        # Step 2: Use quadratic formula to estimate n
+        c = -2 * target
+        part = (1 - 4 * c) ** 0.5
+        root1 = (-1 + part) / 2
+        root2 = (-1 - part) / 2
+        ans = int(max(root1, root2))
+        
+        # Step 3: Calculate sum and adjust if necessary
+        val = ans * (ans + 1) // 2
+        cnt = 0
+        for _ in range(3):  # Only up to 3 iterations needed
+            if val >= target and (val - target) % 2 == 0:
+                break
+            ans += 1
+            val = ans * (ans + 1) // 2
+        
+        return ans
