@@ -1,0 +1,115 @@
+from functools import cmp_to_key
+class Solution:
+    def makeLargestSpecial(self, s: str) -> str:
+        '''
+        given a special string
+
+        N is even
+
+        num 0s is same as num 1s
+
+        1 heavy
+
+        we can swap adjacent special substrings
+
+        must be even
+
+        we want to swap 10s with 11s
+
+        10101010
+
+        given a 10, we can replace is with:
+        1100
+        110100
+        111000
+        11110000
+        ...
+
+
+        given a 1100, we can replace it with:
+        110100
+        111000
+        ....
+
+        its a
+
+
+        
+
+        '''
+        N = len(s)
+
+        check = True
+
+        while check:
+            check = False
+            A = []
+            for i in range(N):
+                arr = [0] * 2
+                t = ""
+                for j in range(i, N):
+                    arr[int(s[j])] += 1
+                    t += s[j]
+                    if arr[0] > arr[1]:
+                        break
+
+                    if arr[0] == arr[1]:
+                        A.append((t, (i, j)))
+
+            def my_cmp(x, y):
+                for a, b in zip(x[0], y[0]):
+                    if a > b:
+                        return -1
+                    if a < b:
+                        return 1
+                
+                if len(x[0]) < len(y[0]):
+                    return -1
+
+                if len(x[0]) > len(y[0]):
+                    return 1
+
+                return 1
+                
+
+
+            A.sort(key=cmp_to_key(my_cmp))
+            # A[:] = A[::-1]
+            # print(A)
+            for i in range(len(A)):
+                if check:
+                    break
+                i1 = A[i][1]
+                for j in range(len(A)-1, i, -1):
+                    i2 = A[j][1]
+
+                    if i2[1] + 1 == i1[0]:
+                        if A[j][0].startswith(A[i][0]) or A[i][0].startswith(A[j][0]):
+                            continue
+                        # print(i1, i2, A[i][0], A[j][0])
+                        ll, rr = i2
+                        l, r = i1
+
+
+                        # print(s)
+                        s = s[:ll] + A[i][0] + s[rr+1:l] + A[j][0] + s[r+1:]
+                        # print(s)
+                        # print()
+
+
+                        check = True
+                        break
+
+            # if check:
+            #     check = False
+
+            #     break
+
+          
+
+
+
+
+        
+        return s
+        
