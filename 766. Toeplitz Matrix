@@ -1,0 +1,8 @@
+class Solution:
+    def isToeplitzMatrix(self, matrix: List[List[int]]) -> bool:
+        rows = len(matrix)
+        cols = len(matrix[0])
+        for i in range(rows-1):
+            if matrix[i][:cols-1] != matrix[i+1][1:cols]:
+                return False
+        return True
