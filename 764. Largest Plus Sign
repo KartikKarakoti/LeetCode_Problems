@@ -1,0 +1,12 @@
+class Solution:
+    def orderOfLargestPlusSign(self, N: int, M: List[List[int]]) -> int:
+    	DP, M, R, T, m = [[math.inf]*N for i in range(N)], {tuple(m) for m in M}, list(range(N)), (0,1), 0
+    	for k,i in itertools.product(T,R):
+    		for _ in T:
+    			c, I, _ = 0, i, R.reverse()
+    			for j in R:
+    				if k: i,j = j,i
+    				c = 0 if (i,j) in M else c + 1
+    				DP[i][j], i = min(DP[i][j],c), I
+    	return max(max(i) for i in DP)
+		
