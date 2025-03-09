@@ -1,0 +1,29 @@
+class Solution:
+    def minSwapsCouples(self, row: List[int]) -> int:
+        couple2seat = [0]* len(row)
+        for i in range(len(row)):
+            couple2seat[row[i]] = i
+        parent = [0]* len(row)
+        vis = [False]* len(row)
+        ret = 0
+        for i in range(len(row)):
+            ptr = i
+            n_people_on_cycle = 0
+            while not vis[ptr]:
+                if ptr % 2 == 0:
+                    parent[ptr] = self.get_couple(row[ptr+1])
+                    vis[ptr+1] = True
+                else: # ptr % 2 == 1
+                    parent[ptr] = self.get_couple(row[ptr-1])
+                    vis[ptr-1] = True
+                vis[ptr] = True
+                ptr = couple2seat[parent[ptr]]
+                n_people_on_cycle += 1
+            ret += max(n_people_on_cycle - 1, 0)
+        return ret
+    
+    def get_couple(self, a):
+        if a % 2 == 0:
+            return a + 1
+        else:
+            return a - 1
