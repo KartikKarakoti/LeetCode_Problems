@@ -1,0 +1,30 @@
+class Solution:
+    def reorganizeString(self, s: str) -> str:
+        # first construct a counter of chars and keep track of the most frequent one
+        counter = defaultdict(int)
+        max_c = ""
+        max_len = 0
+        for c in s:
+            counter[c] += 1
+            if counter[c] > max_len:
+                max_c = c
+                max_len = counter[c]
+        
+        # early return, if the rest of the characters isn't enough to separate the most frequent one
+        if max_len > len(s)//2 + len(s)%2:
+            return ""
+
+        chunks = [max_c] * max_len # init chunks with 1 max_c in each chunk
+        del counter[max_c] # max_c is already put into chunks, so not needed
+        
+        idx = 0
+        for key, val in counter.items():
+            while val > 0: 
+                # spread each key into each chunk
+                chunks[idx] += key
+                val -= 1 
+                idx += 1
+                if idx == max_len: # wrap idx around
+                    idx = 0
+
+        return "".join(chunks)
