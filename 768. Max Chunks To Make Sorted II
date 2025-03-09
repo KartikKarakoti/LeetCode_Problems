@@ -1,0 +1,12 @@
+class Solution:
+    def maxChunksToSorted(self, arr: List[int]) -> int:
+        mono=[]
+        for i in range(len(arr)):
+            if not mono or mono[-1]<=arr[i]: # if the curr is greater than or equal to the top of the chunk we add it. ie. create a new chunk
+                mono.append(arr[i])
+            else:
+                top=mono[-1]
+                while mono and mono[-1]>arr[i]:# if the curr element is less than the top of the chunk we consume it in the chunk
+                    mono.pop()
+                mono.append(top)
+        return len(mono)
