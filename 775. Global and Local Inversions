@@ -1,0 +1,33 @@
+class Solution:
+    def isIdealPermutation(self, nums: List[int]) -> bool:
+        # check if number of global inv is equal to the number of local inv
+        # global = any two
+        # local = consecutive two
+
+        lc = 0
+        gc = 0
+
+        # we need all inversions to be local => then true
+        # means only the two close may be inversed
+        # 0 must be to the left or to the right of 1
+        # 1 must be to the left or to the right of 2
+
+        # ....87654321...9 is bad
+        # not more than 2 in a row
+
+        streak = False
+        for idx in range(1, len(nums)):
+            if nums[idx-1] - 1 == nums[idx]:
+                if streak:
+                    return False
+                streak = True
+                continue
+
+            streak = False
+
+            if not (nums[idx - 1] < nums[idx] or nums[idx-1]-1 == nums[idx]):
+                return False
+
+        return True
+            
+    
