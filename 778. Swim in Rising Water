@@ -1,0 +1,45 @@
+# Question similar to "Path with Minimum Effort" 
+class Solution:
+    def swimInWater(self, grid: List[List[int]]) -> int:
+
+        # Getting rows and cols
+        r=len(grid)
+        c=len(grid[0])
+
+        # 2D array to store minimum elevation to reach there
+        cache=[[math.inf for _ in range(c)] for _ in range(r)]
+
+        # Directions to traverse
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+
+        # Minheap storing (elevation,x co-ordinat, y co-ordinate)
+        minheap=[(grid[0][0],0,0)]
+
+        # Remains same, as this is start postion
+        cache[0][0] = grid[0][0]
+
+        while minheap:
+            # Popping position with miniumm elevation
+            elevation,i,j=heapq.heappop(minheap)
+
+            # Base case to reach end
+            if i==(r-1) and j==(c-1):
+                return elevation
+            
+            # Traversing 4 directions
+            for dx, dy in directions:
+                nx, ny = i + dx, j + dy
+                
+                if 0 <= nx < r and 0 <= ny < c:
+
+                    # "new_elevation" keeping track of max encountered till now
+                    new_elevation=max(grid[nx][ny],elevation)
+
+                    # Update it in cache as well as add in heap if "new_elevation" is less
+                    # than one in cache
+                    if new_elevation < cache[nx][ny]:
+                        cache[nx][ny] = new_elevation
+                        heappush(minheap, (new_elevation, nx, ny))
+
+            
+        
