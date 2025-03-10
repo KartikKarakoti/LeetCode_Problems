@@ -1,0 +1,27 @@
+class Solution:
+    def canTransform(self, start: str, end: str) -> bool:
+        lCount = 0
+        rCount = 0
+        n = len(start)
+        for i in range(n):
+            s = start[i]; e = end[i]
+            if s == 'L' and rCount > 0:
+                return False
+            if e == 'R' and lCount > 0:
+                return False
+            if e == 'L':
+                lCount += 1
+            if s == 'R':
+                rCount += 1
+            if s == 'L':
+                if lCount > 0:
+                    lCount -= 1
+                else:
+                    return False
+            if e == 'R':
+                if rCount > 0:
+                    rCount -= 1
+                else:
+                    return False
+        return lCount == 0 and rCount == 0
+        
