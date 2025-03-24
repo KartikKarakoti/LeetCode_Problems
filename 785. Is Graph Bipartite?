@@ -1,0 +1,20 @@
+from collections import deque
+class Solution:
+    def isBipartite(self, graph: List[List[int]]) -> bool:
+        totalNodes = len(graph)
+        color = [-1 for i in range(totalNodes)]
+        isBipartite = True
+        for i in range(totalNodes):
+            if(color[i] == -1):
+                queue = deque([i])
+                color[i] = 0
+                while len(queue) > 0:
+                    node = queue.popleft()
+                    for neighbor in graph[node]:
+                        if(color[neighbor] == -1):
+                            color[neighbor] = color[node]^1
+                            queue.append(neighbor)
+                        elif(color[neighbor] == color[node]):
+                            isBipartite = False
+                            break
+        return isBipartite
