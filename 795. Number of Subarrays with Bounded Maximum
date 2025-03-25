@@ -1,0 +1,9 @@
+class Solution:
+    def numSubarrayBoundedMax(self, nums: List[int], left: int, right: int) -> int:
+        ans = inc = cnt = 0 
+        for x in nums: 
+            if x < left: cnt += 1
+            elif left <= x <= right: inc = cnt = cnt + 1
+            else: inc = cnt = 0 
+            ans += inc 
+        return ans 
