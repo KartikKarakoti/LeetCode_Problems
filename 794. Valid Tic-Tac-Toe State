@@ -1,0 +1,32 @@
+class Solution:
+    def validTicTacToe(self, board: List[str]) -> bool:
+        rows, cols, diag1, diag2 = [0]*3, [0]*3, 0, 0 
+        o, x = 0, 0
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == "O":
+                    o+=1
+                    rows[i]+=1
+                    cols[j]+=1
+                    if i == j:
+                        diag1+=1
+                    if i+j == 2:
+                        diag2+=1
+                if board[i][j] == "X":
+                    x+=1
+                    rows[i]-=1
+                    cols[j]-=1
+                    if i == j:
+                        diag1-=1
+                    if i+j == 2:
+                        diag2-=1
+        
+        player1 = 3 in rows or 3 in cols or diag1 == 3 or diag2 == 3
+        player2 = -3 in rows or -3 in cols or diag1 == -3 or diag2 == -3
+        
+        if o != x and x-o != 1: return False
+        if player1 and player2: return False
+        if player1: return o == x
+        if player2: return x-o == 1
+
+        return True
