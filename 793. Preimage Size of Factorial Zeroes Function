@@ -1,0 +1,19 @@
+class Solution:
+
+    def preimageSizeFZF(self, k: int) -> int:
+        if k < 5:
+            return 5
+        elif k == 5:
+            return 0
+        left, right = 4, 5 * k
+        while left < right:
+            middle = (left + right) // 2
+            zeros = sum(middle // pow(5, p)
+                        for p in range(1, int(log(middle, 5)) + 1))
+            if zeros < k:
+                left = middle + 1
+            elif zeros > k:
+                right = middle - 1
+            else:
+                return 5
+        return 0
