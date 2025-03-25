@@ -1,0 +1,34 @@
+import heapq 
+from collections import defaultdict 
+# 这个是有向图的问题，并且有边上的数值，应该用dijkstra。 
+class Solution:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        # return the cheapest price from src to dst 
+        graph = defaultdict(list)  
+        for u, v, w in flights:
+            graph[u].append((v, w)) 
+        min_Heap = [(0, src, 0)]  # cost, src, stops   # at most k stops  
+        dist = {}  # calculate the cheapest price 
+        while min_Heap:
+            cost, city, stops = heapq.heappop(min_Heap) 
+            if city == dst:
+                return cost  
+            # if we use more than k stops, pass on this route 
+            if stops > k: continue 
+            # if city in dist and cost >= dist[city] : 
+            #     continue  # 这个判断的条件是不对的
+            # dist[city] = cost 
+            for neighbor, price in graph[city]:
+                # if neighbor not in dist: 不必在乎是不是在dist
+                # if neighbor not in dist:
+                new_cost = cost + price  
+                if (neighbor, stops + 1) not in dist or new_cost < dist[(neighbor, stops + 1)]:
+                    dist[(neighbor, stops + 1)] = new_cost
+                    heapq.heappush(min_Heap, (new_cost, neighbor, stops + 1))
+        
+        return -1
+
+
+
+        
+        
