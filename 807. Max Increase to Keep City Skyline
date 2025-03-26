@@ -1,0 +1,24 @@
+class Solution:
+    def maxIncreaseKeepingSkyline(self, grid: List[List[int]]) -> int:
+        a=[]
+        b=[]
+        s=0
+        for i in grid:
+            a.append(max(i))
+            s+=sum(i)
+        for i in range(len(grid)):
+            c=0
+            for j in range(len(grid)):
+                c=max(c,grid[j][i])
+            b.append(c)
+        res=0
+        for i in range(len(a)):
+            for j in range(len(b)):
+                grid[i][j]=min(a[i],b[j])
+                res+=grid[i][j]
+        return res-s
+        
+
+
+        
+        
