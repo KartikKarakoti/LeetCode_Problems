@@ -1,0 +1,11 @@
+class Solution:
+    def minSwap(self, A: List[int], B: List[int]) -> int:
+        ans = sm = lg = mx = 0
+        for x, y in zip(A, B): 
+            if mx < min(x, y): # prev max < current min
+                ans += min(sm, lg) # update answer & reset 
+                sm = lg = 0 
+            mx = max(x, y)
+            if x < y: sm += 1 # count "x < y"
+            elif x > y: lg += 1 # count "x > y"
+        return ans + min(sm, lg)
