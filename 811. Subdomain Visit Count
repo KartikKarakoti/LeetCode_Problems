@@ -1,0 +1,50 @@
+class Node:
+    def __init__(self, domain, count):
+        self.domain = domain 
+        self.count = count
+        self.children = {}
+
+class Trie:
+    def __init__(self):
+        self.roots = {}
+
+    def add_node(self, domain, count):
+        subdomains = domain.split(".")[::-1]
+
+        if subdomains[0] not in self.roots:
+            self.roots[subdomains[0]] = Node(subdomains[0], 0)
+
+        curr = self.roots[subdomains[0]]
+        curr.count += count 
+
+        for i in range(1, len(subdomains)):
+            sub = ".".join(subdomains[:i+1][::-1])
+            curr.children[sub] = curr.children.get(sub, Node(sub, 0))
+            curr = curr.children[sub]
+            curr.count += count 
+
+class Solution:
+    def subdomainVisits(self, cpdomains: List[str]) -> List[str]:
+        domain_tree = Trie()
+
+        for cpdomain in cpdomains:
+            count, domain = cpdomain.split(' ')
+            count = int(count)
+            domain_tree.add_node(domain, count)
+
+        # traverse the tree 
+        curr = list(domain_tree.roots.values())
+        res = []
+
+        while curr:
+            node = curr.pop()
+            res.append(f"{node.count} {node.domain}")
+
+            for child in node.children.values():
+                curr.append(child)
+
+        return res
+            
+
+
+        
