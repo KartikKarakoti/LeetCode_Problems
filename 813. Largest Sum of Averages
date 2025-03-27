@@ -1,0 +1,16 @@
+class Solution:
+    def largestSumOfAverages(self, nums: List[int], k: int) -> float:
+        
+        @lru_cache(maxsize=None)
+        def maxAvgSum(index: int, partitions_left: int) -> int:
+            if partitions_left == 1:
+                return sum(nums[index:]) / (len(nums) - index)
+
+            max_sum: float = 0.0
+            for i in range(index, len(nums) - (partitions_left - 1)):
+                cur_sum: float = sum(nums[index:i + 1])/(i + 1 - index)
+                cur_sum += maxAvgSum(i + 1, partitions_left - 1)
+                max_sum = max(cur_sum, max_sum)
+            return max_sum
+    
+        return maxAvgSum(0, k)
