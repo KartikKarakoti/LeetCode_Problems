@@ -1,0 +1,46 @@
+class Solution:
+    def numBusesToDestination(self, routes: List[List[int]], source: int, target: int) -> int:
+        if source == target:
+            return 0  
+        
+        # Step 1: Map stops to routes
+        stop_to_routes = defaultdict(list)
+        for route_id, route in enumerate(routes):
+            for stop in route:
+                stop_to_routes[stop].append(route_id)
+        
+        # Step 2: Build the route adjacency list
+        route_adj_list = defaultdict(set)
+        for stop, routes_at_stop in stop_to_routes.items():
+            for i in range(len(routes_at_stop)):
+                for j in range(i + 1, len(routes_at_stop)):
+                    route_adj_list[routes_at_stop[i]].add(routes_at_stop[j])
+                    route_adj_list[routes_at_stop[j]].add(routes_at_stop[i])
+        
+        # Step 3: BFS 
+        visited_routes = set()  # Keep track of visited routes
+        queue = deque()  # stores route IDs
+        
+        # Add all routes containing the source stop to the queue
+        for route in stop_to_routes[source]:
+            queue.append(route)
+            visited_routes.add(route)
+        
+        steps = 0  # Number of buses taken
+        
+        while queue:
+            steps += 1  # Increment the step (buses taken)
+            for _ in range(len(queue)):  # Process all nodes (routes) at the current level
+                current_route = queue.popleft()
+                
+                # Check if this route contains the target stop
+                if target in routes[current_route]:
+                    return steps
+                
+                # add neighboring routes to queue
+                for neighbor_route in route_adj_list[current_route]:
+                    if neighbor_route not in visited_routes:
+                        visited_routes.add(neighbor_route)
+                        queue.append(neighbor_route)
+        
+        return -1  # If we exhaust the search, the target is unreachable
