@@ -1,0 +1,54 @@
+class Solution:
+    def toGoatLatin(self, sentence: str) -> str:
+        prev = ' '
+        As = 1 # a's to add
+        vowels = {'a':0, 'e':0, 'i':0, 'o':0, 'u':0, 'A':0, 'E':0, 'I':0, 'O':0, 'U':0}
+        append = ''
+
+        ch = 0
+        while ch < len(sentence) - 1:
+            if sentence[ch] != ' ' and prev == ' ': # reached the start of a word
+                if sentence[ch] not in vowels: # consonant
+                    append = sentence[ch]
+                    before = sentence[:ch]
+                    after = sentence[ch+1:] # remove first letter
+                    sentence = before + after
+
+            if sentence[ch] == ' ' and prev != ' ': #  end of a word and not end of string
+                if append != '': # consonant
+                    insert = append + 'ma' + 'a'*As
+                else:
+                    insert = 'ma' + 'a'*As
+
+                before = sentence[:ch] 
+                after = sentence[ch:]
+                sentence = before + insert + after
+                
+                if append != '':
+                    ch = ch+3+1*As # increment ch to the end of the word
+                    append = ''
+                else:
+                    ch = ch+2+1*As   
+                As += 1
+            
+            elif sentence[ch] == ' ' and append != '': # one word consonant
+                before = sentence[:ch]
+                insert = append + 'ma' + 'a'*As
+                append = ''
+                after = sentence[ch:]
+                sentence = before + insert + after
+                ch = ch+3+1*As
+                As += 1
+
+            prev = sentence[ch] # increment
+            ch += 1
+
+        # last word of string
+        if append != '': # consonant
+            insert = append + 'ma' + 'a'*As
+        else:
+            insert = 'ma' + 'a'*As
+
+        sentence = sentence + insert
+
+        return sentence
