@@ -1,0 +1,15 @@
+class Solution:
+    def shortestToChar(self, s: str, c: str) -> List[int]:
+        req = []
+        ind_list = []
+        for i in range(len(s)):
+            if s[i] == c:
+                ind_list.append(i)
+        min_dis = len(s)
+        for j in range(len(s)):
+            for k in range(len(ind_list)):
+                min_dis = min(min_dis, abs(j - ind_list[k]))
+            req.append(min_dis)
+            min_dis = len(s)
+            
+        return req
