@@ -1,0 +1,16 @@
+class Solution:
+    def uniqueLetterString(self, s: str) -> int:
+        def does_char_appear_once(sub, t):
+            num=0
+            for c in sub:
+                if c==t:
+                    num+=1
+            return num==1
+            
+        r=0
+        for c in string.ascii_uppercase:
+            for i in range(len(s)):
+                for j in range(i, len(s)):
+                    if does_char_appear_once(s[i:j+1], c):
+                        r+=1
+        return r
