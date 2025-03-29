@@ -1,0 +1,4 @@
+class Solution:
+    def flipAndInvertImage(self, image: List[List[int]]) -> List[List[int]]:
+        return list(map(lambda invert_list: list(map(lambda invert_int: invert_int^1, invert_list)), map(reversed, image)))
+        
