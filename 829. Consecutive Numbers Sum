@@ -1,0 +1,15 @@
+class Solution:
+    def consecutiveNumbersSum(self, n: int) -> int:
+        staircase = 1
+        width = 1
+        count = 0
+        while staircase <= n:
+            blockArea = n-staircase
+            h = blockArea // width # a = h * w
+            if h*width + staircase == n:
+                count += 1
+
+            width += 1
+            staircase += width
+        return count
+        
