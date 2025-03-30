@@ -1,0 +1,38 @@
+# """
+# This is Master's API interface.
+# You should not implement it, or speculate about its implementation
+# """
+# class Master:
+#     def guess(self, word: str) -> int:
+
+class Solution:
+    def findSecretWord(self, words: List[str], master: 'Master') -> None:
+        while words :
+            searchWord = random.choice(words)
+            deleteIndexes= set()
+            score = [0]* len(words)
+            currentScore = master.guess(searchWord)
+            if currentScore == 6:
+                return 
+              
+            else :
+                for a in range (len(words)):
+                 for b in range(6):
+                    if words[a][b] == searchWord[b]:
+                        score[a]+=1
+            for r in range (len(score)):
+                if score[r] != currentScore:
+                    deleteIndexes.add(r)
+            for index in sorted (deleteIndexes, reverse=True):
+                words.pop(index)
+                score.pop(index)
+            deleteIndexes.clear()
+                                                     
+        
+            
+            
+            
+            
+            
+            
+            
