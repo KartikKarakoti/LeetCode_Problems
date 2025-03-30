@@ -1,0 +1,19 @@
+class Solution:
+    def backspaceCompare(self, s: str, t: str) -> bool:
+        a=[]
+        b=[]
+        for i in range(len(s)):
+            if s[i]!='#':
+                a.append(s[i])
+            else:
+                if len(a)>0:
+                    a.pop()
+        for j in range(len(t)):
+            if t[j]!='#':
+                b.append(t[j])
+            else:
+                if len(b)>0:
+                    b.pop()
+        return a==b
+
+        
