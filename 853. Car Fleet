@@ -1,0 +1,16 @@
+class Solution:
+    # O(n*log(n))/O(n)
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        n = len(position)
+        indices = list(range(n))
+        indices.sort(key = lambda idx: position[idx])
+        
+        num_fleets = 0
+        prev_min_time = 0
+        for idx in reversed(indices):
+            time = (target - position[idx]) / speed[idx]
+            if time > prev_min_time:
+                num_fleets += 1
+                prev_min_time = time
+        
+        return num_fleets
