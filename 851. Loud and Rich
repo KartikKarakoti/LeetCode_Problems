@@ -1,0 +1,12 @@
+class Solution:
+    def loudAndRich(self, richer: List[List[int]], quiet: List[int]) -> List[int]:
+        
+        n = len(quiet)
+        g, f = defaultdict(list), lambda x: list(map(dfs,x)) 
+        for u, v in richer: g[v].append(u)
+
+        @lru_cache(2000)
+        def dfs(node):
+            return min(((f(g[node]))+[node]), key=lambda x:quiet[x])
+        
+        return f(range(n))
