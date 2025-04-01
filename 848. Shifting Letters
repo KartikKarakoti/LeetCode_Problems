@@ -1,0 +1,22 @@
+class Solution:
+    def shiftingLetters(self, s: str, shifts: List[int]) -> str:
+        def shifts_char(char, num_shifts):
+            # Take & Come Char to base Value 0(0 Based)
+            base_ascii = ord(char) - ord('a')
+            shifted_ascii = (base_ascii + num_shifts) % 26
+            new_char = chr(shifted_ascii + ord('a'))
+            
+            return new_char
+
+        # Main
+        n = len(shifts)
+        l = list(s)
+        for i in range(n):
+            num_shifts = shifts[i]
+            # we have to shift characters from index 0-i+1
+            for j in range(0, i+1):
+                char = l[j]
+                new_char = shifts_char(char, num_shifts)
+                l[j] = new_char
+
+        return ''.join(l)
