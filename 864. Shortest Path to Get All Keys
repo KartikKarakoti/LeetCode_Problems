@@ -1,0 +1,73 @@
+import collections
+
+class Solution:
+    def shortestPathAllKeys(self, grid: List[str]) -> int:
+
+        m, n = len(grid), len(grid[0])
+
+        # prevent revisit with the same key_state, unlocked state
+        visited_state = [[set() for _ in range(n)] for _ in range(m)]  # set of (key_state, unlocked state)
+
+        key = 0
+        starti, startj = -1, -1
+
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] in 'abcdef':
+                    key += 1
+                if grid[i][j] == '@':
+                    starti, startj = i, j
+
+        # bitmask after getting all keys
+        key_final_state = 0
+        for i in range(key):
+            key_final_state ^= 1 << i
+
+        step = 0
+
+        queue = collections.deque()  # queue of [i, j, key_state, unlocked state]
+        queue.append([starti, startj, 0, 0])
+
+        while queue:
+
+            for _ in range(len(queue)):
+
+                i, j, key_state, unlocked_state = queue.popleft()
+
+                if key_state == key_final_state:
+                    return step
+
+                # move in 4 directions
+                for ii, jj in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
+                    ni, nj = i + ii, j + jj
+
+                    if not (0 <= ni < m and 0 <= nj < n) or grid[ni][nj] == '#':  # exceed grid / wall
+                        continue
+
+                    # update unlocked_state
+                    new_unlocked_state = unlocked_state
+                    if grid[ni][nj] in "ABCDEF":  # lock
+                        bit_shift = ord(grid[ni][nj]) - ord("A")
+                        if not (key_state & 1 << bit_shift):  # but you dont have the key
+                            continue
+
+                        new_unlocked_state |= 1 << i
+
+                    # update key_state
+                    new_key_state = key_state
+                    if grid[ni][nj] in 'abcdef':  # key
+                        bit_shift = ord(grid[ni][nj]) - ord('a')
+                        new_key_state |= 1 << bit_shift
+
+                    # prevent going back / multiple count
+                    state = (new_key_state, new_unlocked_state)
+                    if state in visited_state[ni][nj]:
+                        continue
+                    visited_state[ni][nj].add(state)
+
+                    # '.@' -> walk through
+                    queue.append([ni, nj, new_key_state, new_unlocked_state])
+
+            step += 1
+
+        return -1
