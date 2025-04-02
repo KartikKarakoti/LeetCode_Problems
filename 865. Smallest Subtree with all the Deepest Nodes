@@ -1,0 +1,29 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def subtreeWithAllDeepest(self, root: TreeNode) -> TreeNode:
+
+        def helper(root, level):
+            # reach the leaf node, return current level and its node
+            if not root:
+                return level, None
+            # get left node max depth and its smallest parent
+            left_level, left_node = helper(root.left, level + 1)
+            # get right node max depthh and its smallest parent
+            right_level, right_node = helper(root.right, level + 1)
+            # pick the one with larger level
+            if left_level > right_level:
+                return left_level, left_node
+            if left_level < right_level:
+                return right_level, right_node
+            # if level are same, then current node will be the smallest parent
+            return left_level, root
+
+        return helper(root, 0)[1]
+
+        
+        
