@@ -1,0 +1,28 @@
+class Solution:
+    def primePalindrome(self, n: int) -> int:
+        def check_prime(x):
+            if x < 2:
+                return False
+            if x == 2 or x == 3:
+                return True
+            if x % 2 == 0 or x % 3 == 0:
+                return False
+            divisor = 5
+            while divisor * divisor <= x:
+                if x % divisor == 0 or x % (divisor + 2) == 0:
+                    return False
+                divisor += 6
+            return True
+
+        for size in range(1, 6):
+            for base in range(10 ** (size - 1), 10 ** size):
+                str_base = str(base)
+                pal = int(str_base + str_base[-2::-1])
+                if pal >= n and check_prime(pal):
+                    return pal
+
+            for base in range(10 ** (size - 1), 10 ** size):
+                str_base = str(base)
+                pal = int(str_base + str_base[::-1])
+                if pal >= n and check_prime(pal):
+                    return pal
