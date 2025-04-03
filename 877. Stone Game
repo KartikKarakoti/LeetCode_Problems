@@ -1,0 +1,25 @@
+class Solution:
+    def stoneGame(self, piles: List[int]) -> bool:
+        # Even number of piles, so each player gets the same number of total piles
+        # Sum of piles is odd, sum of all even != sum of all odd indices
+        # Alice can chose all even or all odd since first choice
+        # Therefore, will always win the game
+        return True
+
+        # n = len(piles)
+        # dp = piles[:] # difference in choosing pile vs other option
+
+        # for d in range(1, n): # length of winow, 1 -> all piles
+        #     for i in range(n - d): # move start of window, 0 -> end of window
+
+        #         # piles[i] and piles[i + d] are the start and end of window, two options for choosing
+
+        #         # dp[i + 1] when piles[i] is chosen, subarray shifts forward
+        #         # dp[i] when piles[i + d] is chosen, subarray shrinks, already accounted for in dp[i]
+
+        #         # set current difference to the highest between choosing first or last pile
+        #         dp[i] = max(piles[i] - dp[i + 1], piles[i + d] - dp[i])
+        
+        # # dp has the lowest differences for choice between first and last option
+        # # if the the first choice, dp[0], is positive, then alice wins
+        # return dp[0] > 0 
