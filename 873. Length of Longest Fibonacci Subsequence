@@ -1,0 +1,24 @@
+class Solution:
+    def lenLongestFibSubseq(self, arr):
+        """
+        Finds the length of the longest Fibonacci-like subsequence in arr.
+
+        Args:
+            arr: A strictly increasing array of positive integers.
+
+        Returns:
+            The length of the longest Fibonacci-like subsequence, or 0 if none exists.
+        """
+        n = len(arr)
+        index = {x: i for i, x in enumerate(arr)}
+        dp = {}  # dp[(i, j)] = length of Fibonacci-like subsequence ending with arr[i] and arr[j]
+
+        longest = 0
+        for i in range(n):
+            for j in range(i):
+                k = arr[i] - arr[j]
+                if k in index and index[k] < j:
+                    dp[(j, i)] = dp.get((index[k], j), 2) + 1
+                    longest = max(longest, dp[(j, i)])
+
+        return longest
