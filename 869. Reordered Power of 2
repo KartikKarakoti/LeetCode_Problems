@@ -1,0 +1,7 @@
+class Solution:
+    def reorderedPowerOf2(self, n: int) -> bool:
+        for i in permutations(str(n)):  
+            if "".join(i)[0]!='0':
+                if (int("".join(i))&(int("".join(i))-1))==0:
+                    return True
+        return False
