@@ -1,0 +1,18 @@
+class Solution:
+    def leaves_collector(self, root, leaves):
+        if not root.left and not root.right:
+            leaves.append(root.val) 
+        if root.left:
+            self.leaves_collector(root.left, leaves) 
+        if root.right:
+            self.leaves_collector(root.right, leaves)
+        return
+
+    def leafSimilar(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> bool:
+        root1_leaves = []
+        self.leaves_collector(root1, root1_leaves)
+
+        root2_leaves = []
+        self.leaves_collector(root2, root2_leaves)
+
+        return root1_leaves == root2_leaves
