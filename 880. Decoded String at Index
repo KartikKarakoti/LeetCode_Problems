@@ -1,0 +1,17 @@
+class Solution:
+    def decodeAtIndex(self, s: str, k: int) -> str:
+        decoded_str = ""  # Initialize an empty string to store the decoded characters
+        i = 0  # Initialize an index for the input string
+
+        # Continue decoding characters until the length of the decoded string is less than k
+        while len(decoded_str) < k:
+            # If the current character is a digit, repeat the decoded string by the digit
+            if s[i].isdigit():
+                decoded_str *= int(s[i])
+            else:
+                # If the current character is a letter, add it to the decoded string
+                decoded_str += s[i]
+            i += 1  # Move to the next character in the input string
+
+        # Return the k-th character (1-based index) from the decoded string
+        return decoded_str[k - 1]
