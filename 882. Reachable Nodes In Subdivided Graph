@@ -1,0 +1,32 @@
+class Solution:
+    def reachableNodes(self, edges: List[List[int]], maxMoves: int, n: int) -> int:
+        graph = defaultdict(dict)
+        for u,v,cnt in edges:
+            graph[u][v]=graph[v][u]=cnt
+        
+        cur = [(0,0)]
+        heapify(cur)
+        visited, added = set(), {0}
+        sol, addn = 1, n+1
+
+        while cur:
+            c,v = heappop(cur)
+            if v in visited:
+                continue
+            visited.add(v)
+            for u in graph[v]:
+                if u not in visited:
+                    if c + graph[v][u] + 1 <= maxMoves:
+                        sol += graph[v][u]
+                        if u not in added:
+                            sol += 1
+                            added.add(u)
+                        if u <= n:
+                            heappush(cur,(c + graph[v][u] + 1, u))
+                    else:
+                        sol += maxMoves-c
+                        graph[u][addn] = graph[v][u]-(maxMoves-c)-1
+                        graph[u].pop(v,None)
+                        addn += 1
+
+        return sol
