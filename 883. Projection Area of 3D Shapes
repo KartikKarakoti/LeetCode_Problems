@@ -1,0 +1,8 @@
+class Solution:
+    def projectionArea(self, grid: List[List[int]]) -> int:
+        area = 0
+        for i in grid:
+            area += len(i) - i.count(0) + max(i)
+        for i in zip(*grid):
+            area += max(i)
+        return area
