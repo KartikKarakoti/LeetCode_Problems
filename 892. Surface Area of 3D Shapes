@@ -1,0 +1,17 @@
+class Solution:
+    def surfaceArea(self, grid: List[List[int]]) -> int:
+        N = len(grid)
+        ret = 0
+        for i in range(N):
+            for j in range(N):
+                v = grid[i][j]
+                if v:
+                    ret += 2
+                    ret += v * 4
+                    if i:
+                        p = grid[i-1][j]
+                        ret -= min(v, p) * 2
+                    if j:
+                        p = grid[i][j-1]
+                        ret -= min(v, p) * 2
+        return ret
