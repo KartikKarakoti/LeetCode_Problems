@@ -1,0 +1,27 @@
+class FreqStack:
+
+    def __init__(self):
+        self.freq = 0
+        self.numToFreq = {}
+        self.freqToNum = {}
+
+    def push(self, val: int) -> None:
+        if val not in self.numToFreq:
+            self.numToFreq[val] = 1
+        else:
+            self.numToFreq[val] += 1
+
+        if self.numToFreq[val] > self.freq:
+            self.freq = self.numToFreq[val]
+        
+        if self.numToFreq[val] not in self.freqToNum:
+            self.freqToNum[self.numToFreq[val]] = [val]
+        else:
+            self.freqToNum[self.numToFreq[val]].append(val)
+        
+    def pop(self) -> int:
+        ret = self.freqToNum[self.freq].pop()
+        if not self.freqToNum[self.freq]:
+            self.freq -= 1
+        self.numToFreq[ret] -= 1
+        return ret
