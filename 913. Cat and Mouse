@@ -1,0 +1,157 @@
+class Solution:
+    def catMouseGame(self, adj: List[List[int]]) -> int:
+        # What I tried:
+        # BFS/DFS (considered only) - we need to play optimally, not explore all paths. NEXT.
+        # "dual DFS," a mouseResult(m, c) and catResult(m, c) function that call each other.
+        # If we encounter a state that we've already seen that means it's a draw***.
+
+        # Spoiler alert: *** is WRONG. If we've seen the state in DFS, it means that we don't
+        # have an answer yet. NOT that it's necessarily a loop.
+
+        # Example: suppose the state is (m, c, player) where
+        #    m, c are the mouse and cat locations
+        #    player is whose turn it is to play
+
+        # Some states are easy, like (m, c, mouse) where m is adjacent to zero.
+        #    Mouse moves to 0 and wins.
+
+        # Or anything of the form (m, c, cat) where m is adjacent to cat
+
+        # For DP we have a table and fill it out deterministically in a known pattern
+        # For DFS we automatically fill in the table (the code determines the recurrence rel.)
+        # but we know that all the calls will terminate in a base case.
+
+        # But in this case we can have loops, or things where we don't know the result for (m, c, p) *yet*,
+        # but will know later as we fill in more of the graph
+
+        UNK = 0 # for easy "if not state: <fill in that state>"
+        MOUSE_WINS = 1
+        CAT_WINS = 2
+        BAD = 3 # mainly for cat-is-at-0 stuff
+
+        MOUSE = 0
+        CAT = 1
+
+        # we'll use BFS in SPFA style, basically graph coloring/relaxation
+        #   1. we'll fill in some easy base cases: mouse victory and cat victory, and the illegal states
+        #   2. queue adjacent nodes
+        #   3. then process the queue - if a state's result (mouse/cat/draw) is known, we fill it in an enqueue
+        #      its neighbors. otherwise just drop it - either we'll enqueue it again when we learn more, or discard it
+
+        n = len(adj)
+        q = deque()
+        enq = set()
+        W = [[[UNK]*n for _ in range(n)] for _ in range(2)] # W[p][m][c]; p==0 is mouse, p == 1 is cat
+        
+        def updateNeighbors(m, c, p):
+            """Enqueues unsolved problems (m', c', 1-p) that depend on the result of m,c,p."""
+            if p == MOUSE:
+                # things depending on this are states (m, c', CAT): after the cat moves from c' to c,
+                # the result is W[p][m][c]                
+                for c2 in adj[c]:
+                    if c2 == 0:
+                        continue
+
+                    if W[CAT][m][c2] == UNK:
+                        state = (m, c2, CAT)
+                        if state not in enq:
+                            enq.add(state)
+                            q.append(state)
+            else:
+                for m2 in adj[m]:
+                    if W[MOUSE][m2][c] == UNK:
+                        state = (m2, c, MOUSE)
+                        if state not in enq:
+                            enq.add(state)
+                            q.append(state)
+
+        # set results for base cases and enqueue neighbors
+
+        # if the mouse reaches the hole it wins
+        for c in range(1, n):
+            for p in [MOUSE, CAT]: # BUG 1: NEED TO ADD ALL BASE CASES, before was just mouse. Need to make sure mouse knows moving to (c, c, cat) is a loss
+                W[p][0][c] = MOUSE_WINS # ..[CAT] because it's the cat's turn after the mouse moves to the hole
+                updateNeighbors(0, c, p)
+
+        # if the cat reaches the mouse, the cat wins
+        for m in range(1, n):
+            for p in [MOUSE, CAT]: # BUG 1: same thing
+                W[p][m][m] = CAT_WINS
+                updateNeighbors(m, m, p)
+
+        # cat isn't allowed to be at the hole node on anyone's turn
+        for m in range(1, n):
+            for p in [MOUSE, CAT]:
+                W[p][m][0] = BAD
+
+        # and now for the heavy lifting
+        while q:
+            state = q.popleft()
+            enq.remove(state)
+            m, c, p = state
+
+            if W[p][m][c]:
+                # this can occur at the beginning when we enqueue neighbors of
+                # the base cases - those neighbors themselves may also be base cases
+                continue
+
+            if m == c:
+                raise RuntimeError("m == c: (m, c, p) =", (m, c, p))
+
+            if p == MOUSE:
+                # consider all moves, and the result of the game from there
+                #   if any of those states is MOUSE_WINS, then the mouse can force a win
+                #   if all valid adj states are CAT_WINS, then the cat wins
+                #   otherwise either
+                #      - it's a draw: cat and mouse can repeat moves forever
+                #      - or we still don't know enough. this state will be re-enqueued if/when we learn more
+                foundUnk = False
+                for m2 in adj[m]:
+                    if W[CAT][m2][c] == MOUSE_WINS:
+                        if m == 1 and c == 2:
+                            return MOUSE_WINS
+                        W[MOUSE][m][c] = MOUSE_WINS
+                        updateNeighbors(m, c, MOUSE) # BUG 2: FORGOT TO UPDATE NEIGHBORS
+
+                        break
+                    elif W[CAT][m2][c] == UNK:
+                        foundUnk = True # record that there's at least one state we don't know
+                        # can't mark it as a draw or CAT_WINS yet because we don't know this
+                        # node. We may determine its value later as we keep relaxing/coloring
+                        # the graph
+                    # else: CAT_WINS or BAD
+
+                if W[MOUSE][m][c] == UNK and not foundUnk:
+                    # we visited all neighbors of this node, and all valid neighbors were CAT_WINS. So CAT_WINS
+                    if m == 1 and c == 2:
+                        return CAT_WINS
+                    W[MOUSE][m][c] = CAT_WINS
+                    updateNeighbors(m, c, MOUSE)
+                # else: need to know 1+ neighbor before we know this state. So
+                # hold off until this state is re-enqueued via learning the result
+                # of a neighbor
+            else: # p == CAT:
+                foundUnk = False
+                for c2 in adj[c]:
+                    if c2 == 0:
+                        continue
+                    elif W[MOUSE][m][c2] == CAT_WINS:
+                        W[CAT][m][c] = CAT_WINS # cat can force a win by moving here
+                        updateNeighbors(m, c, CAT)
+                        break
+                    elif W[MOUSE][m][c2] == UNK:
+                        foundUnk = True
+
+                if W[CAT][m][c] == UNK and not foundUnk:
+                    W[CAT][m][c] = MOUSE_WINS
+                    updateNeighbors(m, c, CAT)
+
+        for p in [MOUSE, CAT]:
+            for m in range(n):
+                for c in range(n):
+                    if W[p][m][c] in [MOUSE_WINS, CAT_WINS]:
+                        print(m, c, 'cat' if p else 'mouse', '->', 'MOUSE' if W[p][m][c] == MOUSE_WINS else 'CAT')
+
+        # we solved all states we can solve. the rest are states where neither player can force
+        # a win, i.e. a draw
+        return 0
