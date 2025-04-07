@@ -1,0 +1,18 @@
+class Solution:
+    def partitionDisjoint(self, nums: List[int]) -> int:
+        
+        n = len(nums)
+        p_min = [float('inf')] * n
+        p_max = [-1] * n
+        p_min[n - 1] = nums[n - 1]
+        p_max[0] = nums[0]
+
+        for i in range(n - 2, -1, -1):
+            p_min[i] = min(nums[i], p_min[i + 1])
+            p_max[n - i - 1] = max(nums[n - i - 1], p_max[n - i - 2])
+        
+
+        for i in range(n):
+
+            if nums[i] <= p_min[i + 1] and p_max[i] <= p_min[i + 1]:
+                return i + 1
