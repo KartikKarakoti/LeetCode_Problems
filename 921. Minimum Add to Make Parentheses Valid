@@ -1,0 +1,11 @@
+class Solution:
+    def minAddToMakeValid(self, s: str) -> int:
+        s2 = []
+        for i in s:
+            if i == "(":
+                s2.append("(")
+            elif i == ")" and (s2 == [] or s2[-1] == ")"):
+                s2.append(")")
+            else:
+                s2.pop()
+        return len(s2)
